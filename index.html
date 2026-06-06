@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Miclase Marvel Universe</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="hero">
+    <nav class="topbar">
+      <div class="brand">
+        <span class="brand-mark">M</span>
+        <div>
+          <h1>Miclase Marvel Universe</h1>
+          <p>Interchangeable Marvel reading roadmap tracker</p>
+        </div>
+      </div>
+      <button id="themeToggle" class="ghost-btn" type="button" aria-label="Toggle theme">☾</button>
+    </nav>
+
+    <section class="dashboard" aria-label="Reading progress dashboard">
+      <div class="stat-card primary-stat">
+        <span class="stat-label">Total progress</span>
+        <strong id="globalProgressText">0 / 0</strong>
+        <div class="progress-shell"><div id="globalProgressBar" class="progress-fill"></div></div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Current phase</span>
+        <strong id="phaseProgressText">0 / 0</strong>
+        <div class="progress-shell"><div id="phaseProgressBar" class="progress-fill alt"></div></div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Blocks completed</span>
+        <strong id="blockProgressText">0 / 0</strong>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Current focus</span>
+        <strong id="currentPhaseLabel">Phase 1</strong>
+      </div>
+    </section>
+  </header>
+
+  <main class="layout">
+    <aside class="sidebar" aria-label="Phase navigation">
+      <div class="panel-title">Reading Phases</div>
+      <div id="phaseTabs" class="phase-tabs"></div>
+      <div class="toolbox">
+        <button id="markPhaseBtn" class="tool-btn" type="button">Mark phase read</button>
+        <button id="clearPhaseBtn" class="tool-btn danger" type="button">Clear phase</button>
+        <button id="expandAllBtn" class="tool-btn" type="button">Expand visible</button>
+        <button id="collapseAllBtn" class="tool-btn" type="button">Collapse visible</button>
+      </div>
+    </aside>
+
+    <section class="content">
+      <div class="controls">
+        <div class="search-wrap">
+          <label for="searchInput">Search roadmap</label>
+          <input id="searchInput" type="search" placeholder="Search Spider-Man, Secret Wars, UXM #129..." autocomplete="off" />
+        </div>
+        <div class="filter-wrap">
+          <label for="familyFilter">Character / team</label>
+          <select id="familyFilter">
+            <option value="all">All families</option>
+          </select>
+        </div>
+      </div>
+
+      <section class="phase-intro">
+        <div>
+          <p id="phaseKicker" class="kicker">Phase 1</p>
+          <h2 id="phaseTitle">Marvel foundation era</h2>
+          <p id="phaseDesc">The birth of the Marvel universe.</p>
+        </div>
+        <div class="phase-mini-stat">
+          <span id="visibleCount">0 blocks visible</span>
+        </div>
+      </section>
+
+      <div id="blocksContainer" class="blocks"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Progress saves automatically in your browser using localStorage.</p>
+    <div class="footer-actions">
+      <button id="exportBtn" class="ghost-btn" type="button">Export progress</button>
+      <label class="import-label" for="importInput">Import progress</label>
+      <input id="importInput" type="file" accept="application/json" hidden />
+      <button id="resetBtn" class="ghost-btn danger-text" type="button">Reset all</button>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
