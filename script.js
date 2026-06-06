@@ -52,6 +52,7 @@ const phases = [
     desc: 'Marvel becomes more tragic, political, cosmic, and interconnected.',
     blocks: [
       { title: 'Avengers: Kree-Skrull War', family: 'Avengers', note: 'Event lock. First major cosmic Avengers saga.', issues: R('Avengers', 89, 97) },
+      { title: 'Thanos: First Blood and Cosmic Cube', family: 'Thanos / Captain Marvel / Avengers', writer: 'Jim Starlin, Mike Friedrich, Steve Englehart', years: '1973-1974', tags: ['Essential', 'Cosmic'], note: 'Thanos enters Marvel through Iron Man, Captain Marvel, the Cosmic Cube, Avengers, and Daredevil side material. Read this to understand classic Thanos before the Gems become the whole game.', issues: M(I('Iron Man', ['#55']), R('Captain Marvel', 25, 33), I('Marvel Feature', ['#12']), I('Avengers', ['#125']), R('Daredevil', 105, 107)) },
       { title: 'Spider-Man: Death of Captain Stacy', family: 'Spider-Man', note: 'Peter and Gwen’s tragedy deepens.', issues: R('Amazing Spider-Man', 88, 90) },
       { title: 'Spider-Man: Green Goblin Reborn / drug issues', family: 'Spider-Man', note: 'Harry, Norman, drugs, and Comics Code history.', issues: R('Amazing Spider-Man', 96, 98) },
       { title: 'Defenders prelude', family: 'Defenders', note: 'Optional but useful Strange, Hulk, and Namor setup.', issues: R('Sub-Mariner', 34, 35) },
@@ -68,11 +69,14 @@ const phases = [
       { title: 'Fantastic Four: Thing vs Hulk', family: 'Fantastic Four / Hulk', note: 'Optional but excellent Ben Grimm and Hulk material.', issues: I('Fantastic Four', ['#112']) },
       { title: 'Captain America: Madbomb', family: 'Captain America', note: 'Kirby-era Cap weirdness and anti-authoritarian action.', issues: R('Captain America', 193, 200) },
       { title: 'X-Men: Second Genesis begins', family: 'X-Men', note: 'Definitive X-Men start. New team arrives.', issues: M(I('Giant-Size X-Men', ['#1']), R('Uncanny X-Men', 94, 100)) },
-      { title: 'Avengers: Celestial Madonna Saga', family: 'Avengers', note: 'Kang, Mantis, Vision, Scarlet Witch, and cosmic Avengers weirdness.', issues: M(R('Avengers', 129, 135), R('Giant-Size Avengers', 2, 4)) },
+      { title: 'Avengers: Celestial Madonna Saga', family: 'Avengers / Vision & Scarlet Witch', writer: 'Steve Englehart', years: '1974-1975', tags: ['Essential', 'Vision/Wanda'], note: 'Kang, Mantis, Vision, Scarlet Witch, and the Vision/Wanda wedding foundation. Giant-Size Avengers #4 is the key issue for the couple.', issues: M(R('Avengers', 129, 135), R('Giant-Size Avengers', 2, 4)) },
+      { title: 'Vision and Scarlet Witch: First House', family: 'Vision & Scarlet Witch / Avengers', writer: 'Bill Mantlo', years: '1982-1983', tags: ['Essential', 'Vision/Wanda'], note: 'The first dedicated Vision/Wanda mini. This gives their marriage a domestic/mystic identity outside the Avengers mansion.', issues: R('Vision and the Scarlet Witch vol. 1', 1, 4) },
       { title: 'X-Men: All-New team deepens', family: 'X-Men', note: 'Phoenix, space, Shi’ar, and team identity.', issues: R('Uncanny X-Men', 101, 108) },
       { title: 'Defenders: Steve Gerber part 1', family: 'Defenders', note: 'The Defenders become properly strange.', issues: M(I('Giant-Size Defenders', ['#3']), R('Defenders', 20, 25)) },
       { title: 'Spider-Man: Black Cat / Burglar return era', family: 'Spider-Man', note: 'Black Cat arrives and Peter confronts origin trauma.', issues: R('Amazing Spider-Man', 194, 200) },
       { title: 'Avengers: Korvac Saga', family: 'Avengers', note: 'Event lock. Cosmic Avengers classic.', issues: M(I('Thor Annual', ['#6']), R('Avengers', 167, 168), R('Avengers', 170, 177)) },
+      { title: 'Thanos: Warlock and the Soul Gem finale', family: 'Thanos / Cosmic Marvel', writer: 'Jim Starlin', years: '1975-1977', tags: ['Essential', 'Cosmic'], note: 'Adam Warlock, Thanos, the Soul Gem, and the first major Thanos endgame. This is the older cosmic road that later feeds Infinity Gauntlet.', issues: M(R('Warlock', 9, 11), I('Warlock', ['#15']), I('Avengers Annual', ['#7']), I('Marvel Two-In-One Annual', ['#2'])) },
+      { title: 'The Death of Captain Marvel', family: 'Captain Marvel / Thanos', writer: 'Jim Starlin', years: '1982', tags: ['Essential', 'Cosmic'], note: 'A quiet, important death story with Thanos in a symbolic role. Read after the first Thanos cycle.', issues: I('Marvel Graphic Novel', ['#1: The Death of Captain Marvel']) },
       { title: 'Defenders: Steve Gerber part 2', family: 'Defenders', note: 'Outsider-team chaos, satire, and mysticism.', issues: R('Defenders', 26, 33) },
       { title: 'Defenders: Steve Gerber part 3', family: 'Defenders', note: 'Finish the classic Gerber Defenders stretch.', issues: M(R('Defenders', 34, 41), I('Defenders Annual', ['#1']), R('Giant-Size Defenders', 4, 5)) }
     ]
@@ -94,11 +98,13 @@ const phases = [
       { title: 'X-Men: God Loves, Man Kills', family: 'X-Men', note: 'One of the clearest “what X-Men means” stories.', issues: I('Marvel Graphic Novel', ['#5: X-Men: God Loves, Man Kills']) },
       { title: 'Fantastic Four: Byrne cosmic part', family: 'Fantastic Four', note: 'Galactus, Terrax, and Reed’s moral burden.', issues: R('Fantastic Four', 242, 244) },
       { title: 'Spider-Man: The Kid Who Collects Spider-Man', family: 'Spider-Man', note: 'Short emotional masterpiece.', issues: I('Amazing Spider-Man', ['#248']) },
+      { title: 'Fantastic Four: Byrne full run bridge 1', family: 'Fantastic Four', writer: 'John Byrne', years: '1983-1984', tags: ['Full run'], note: 'Extra Byrne material so your FF reading is not only the essential arcs. Read this between the highlighted Byrne set-pieces.', issues: R('Fantastic Four', 245, 256) },
       { title: 'Daredevil: Elektra Saga part 2', family: 'Daredevil', note: 'Finish the Bullseye/Elektra core tragedy.', issues: R('Daredevil', 177, 182) },
       { title: 'X-Men: Brood Saga', family: 'X-Men', note: 'Slightly over 12, but read together as space horror.', issues: R('Uncanny X-Men', 154, 167) },
       { title: 'Spider-Man: Alien Costume Saga', family: 'Spider-Man', note: 'Black suit core version. Leads toward Venom.', issues: M(R('Amazing Spider-Man', 252, 259), I('Web of Spider-Man', ['#1'])) },
       { title: 'Daredevil: Miller finale', family: 'Daredevil', note: 'Includes “Roulette,” one of the great Bullseye and Matt stories.', issues: R('Daredevil', 183, 191) },
-      { title: 'Fantastic Four: Trial of Reed Richards', family: 'Fantastic Four', note: 'Reed is judged for saving Galactus.', issues: R('Fantastic Four', 257, 262) },
+      { title: 'Fantastic Four: Trial of Reed Richards', family: 'Fantastic Four', writer: 'John Byrne', years: '1984', tags: ['Essential', 'Full run'], note: 'Reed is judged for saving Galactus. Essential Byrne/FF morality material.', issues: R('Fantastic Four', 257, 262) },
+      { title: 'Fantastic Four: Byrne full run bridge 2', family: 'Fantastic Four', writer: 'John Byrne', years: '1984-1985', tags: ['Full run'], note: 'More of Byrne’s family/cosmic/social texture before the Sue-centered Malice arc.', issues: R('Fantastic Four', 263, 279) },
       { title: 'X-Men: From the Ashes', family: 'X-Men', note: 'Rogue joins, Kitty grows, Morlocks, and Madelyne.', issues: R('Uncanny X-Men', 168, 176) },
       { title: 'Doctor Strange: Montesi Formula', family: 'Doctor Strange', note: 'Strange vs vampire mythology.', issues: R('Doctor Strange vol. 2', 59, 62) },
       { title: 'Daredevil / Kingpin: Love and War', family: 'Daredevil', note: 'Optional, but excellent Kingpin psychology.', issues: I('Marvel Graphic Novel', ['#24: Daredevil: Love and War']) },
@@ -108,6 +114,7 @@ const phases = [
       { title: 'Daredevil: Born Again', family: 'Daredevil', note: 'Event lock. Definitive Daredevil story.', issues: R('Daredevil', 227, 233) },
       { title: 'X-Men: LifeDeath / Storm', family: 'X-Men', note: 'Essential Storm character work.', issues: I('Uncanny X-Men', ['#186', '#198']) },
       { title: 'Fantastic Four / Jean Grey return', family: 'Fantastic Four / X-Men', note: 'Related X-Men/FF bridge. Optional unless you care about Jean and X-Factor.', issues: M(R('Fantastic Four', 285, 286), I('Avengers', ['#263']), I('X-Factor', ['#1'])) },
+      { title: 'Fantastic Four: Byrne finale and annuals', family: 'Fantastic Four', writer: 'John Byrne', years: '1983-1986', tags: ['Full run'], note: 'The remaining late Byrne FF stretch plus annuals. This completes your intended John Byrne Fantastic Four run.', issues: M(R('Fantastic Four', 287, 295), R('Fantastic Four Annual', 17, 19)) },
       { title: 'Thor: Beta Ray Bill', family: 'Thor', note: 'Someone else is worthy. Perfect Thor entry point.', issues: R('Thor', 337, 340) },
       { title: 'Hulk: Peter David begins', family: 'Hulk', note: 'Gray Hulk and Joe Fixit era begins.', issues: R('Incredible Hulk', 331, 339) },
       { title: 'Thor: Surtur Saga', family: 'Thor', note: 'Event lock. Classic Simonson Thor epic.', issues: R('Thor', 341, 353) },
@@ -116,6 +123,8 @@ const phases = [
       { title: 'Doctor Strange + Doom: Triumph and Torment', family: 'Doctor Strange / Fantastic Four', note: 'Essential Strange and Doom.', issues: I('Doctor Strange and Doctor Doom: Triumph and Torment', ['GN']) },
       { title: 'Thor: Frog Thor', family: 'Thor', note: 'Weird, funny, mythic, somehow perfect.', issues: R('Thor', 364, 366) },
       { title: 'Avengers: Trial/Fall of Hank Pym', family: 'Avengers', note: 'Important Hank and Wasp material.', issues: M(I('Avengers', ['#212', '#213']), R('Avengers', 227, 230)) },
+      { title: 'Vision and Scarlet Witch: A Year in the Life', family: 'Vision & Scarlet Witch / Avengers', writer: 'Steve Englehart', years: '1985-1986', tags: ['Essential', 'Vision/Wanda'], note: 'The major Vision/Wanda domestic era, including the birth of Billy and Tommy. This is one of the main roads into later Wanda/Vision tragedy.', issues: M(R('Vision and the Scarlet Witch vol. 2', 1, 12), I('West Coast Avengers', ['#2'])) },
+      { title: 'Vision: Absolute Vision lead-up', family: 'Vision & Scarlet Witch / Avengers', writer: 'Roger Stern', years: '1985', tags: ['Vision/Wanda'], note: 'Vision tries to reshape the world through Avengers computer systems. This matters for how governments later treat him.', issues: R('Avengers', 253, 254) },
       { title: 'Spider-Man: Venom’s birth', family: 'Spider-Man', note: 'Eddie Brock/Venom becomes the big late-80s threat.', issues: M(R('Amazing Spider-Man', 298, 300), R('Amazing Spider-Man', 315, 317)) },
       { title: 'Avengers: Under Siege', family: 'Avengers', note: 'One of the best classic Avengers stories.', issues: R('Avengers', 270, 277) },
       { title: 'Defenders: Six-Fingered Hand', family: 'Defenders', note: 'Occult Defenders with Strange, Hulk, Hellcat, and Nighthawk.', issues: R('Defenders', 92, 100) }
@@ -139,11 +148,14 @@ const phases = [
       { title: 'Daredevil: Last Rites', family: 'Daredevil', note: 'Born Again echo. Matt vs Kingpin reversal.', issues: R('Daredevil', 297, 300) },
       { title: 'Hulk: Future Imperfect', family: 'Hulk', note: 'Maestro. Tiny, essential Hulk story.', issues: R('Hulk: Future Imperfect', 1, 2) },
       { title: 'X-Men: Muir Island Saga', family: 'X-Men', note: 'Claremont exit bridge into 90s X-Men.', issues: M(R('Uncanny X-Men', 278, 280), R('X-Factor', 69, 70)) },
+      { title: 'Thanos: Rebirth and Thanos Quest', family: 'Thanos / Silver Surfer', writer: 'Jim Starlin', years: '1990', tags: ['Essential', 'Cosmic'], note: 'Thanos returns and gathers the Infinity Gems. This is the clean bridge into Infinity Gauntlet.', issues: M(R('Silver Surfer', 34, 38), R('Thanos Quest', 1, 2)) },
+      { title: 'Infinity Gauntlet', family: 'Thanos / Avengers / Cosmic Marvel', writer: 'Jim Starlin', years: '1991', tags: ['Essential', 'Event', 'Cosmic'], note: 'Event lock. The definitive Thanos story and the core Infinity event.', issues: R('Infinity Gauntlet', 1, 6) },
       { title: 'X-Men: Mutant Genesis', family: 'X-Men', note: 'Jim Lee/Claremont, Magneto, Blue and Gold era.', issues: R('X-Men', 1, 3) },
       { title: 'Spider-Man: Maximum Carnage', family: 'Spider-Man', note: 'Event lock. Carnage/Venom chaos. Very 90s.', issues: M(I('Spider-Man Unlimited', ['#1']), I('Web of Spider-Man', ['#101']), I('Amazing Spider-Man', ['#378']), I('Spider-Man', ['#35']), I('Peter Parker, The Spectacular Spider-Man', ['#201']), I('Web of Spider-Man', ['#102']), I('Amazing Spider-Man', ['#379']), I('Spider-Man', ['#36']), I('Peter Parker, The Spectacular Spider-Man', ['#202']), I('Web of Spider-Man', ['#103']), I('Amazing Spider-Man', ['#380']), I('Spider-Man', ['#37']), I('Peter Parker, The Spectacular Spider-Man', ['#203']), I('Spider-Man Unlimited', ['#2'])) },
       { title: 'X-Men: X-Cutioner’s Song', family: 'X-Men', note: 'Event lock. Cable, Stryfe, Apocalypse, and Summers mythology.', issues: M(R('Uncanny X-Men', 294, 297), R('X-Factor', 84, 86), R('X-Men', 14, 16), R('X-Force', 16, 19)) },
       { title: 'Daredevil: Guardian Devil', family: 'Daredevil', note: 'Marvel Knights reset. Big status-quo damage.', issues: M(R('Daredevil vol. 2', 1, 8), I('Daredevil vol. 2', ['#1/2'])) },
       { title: 'X-Men: Fatal Attractions', family: 'X-Men', note: 'Event lock. Magneto, Xavier, and Wolverine.', issues: M(I('X-Factor', ['#92']), I('X-Force', ['#25']), I('Uncanny X-Men', ['#304']), I('X-Men', ['#25']), I('Wolverine', ['#75']), I('Excalibur', ['#71'])) },
+      { title: 'Infinity War and Infinity Crusade core', family: 'Thanos / Cosmic Marvel', writer: 'Jim Starlin', years: '1992-1993', tags: ['Cosmic', 'Optional'], note: 'Optional after Infinity Gauntlet. These are big cosmic sequels, useful if you want the full Starlin Infinity trilogy.', issues: M(R('Infinity War', 1, 6), R('Infinity Crusade', 1, 6)) },
       { title: 'Daredevil: Parts of a Hole', family: 'Daredevil', note: 'Echo/Maya Lopez enters.', issues: R('Daredevil vol. 2', 9, 15) },
       { title: 'Spider-Man: selective Clone Saga', family: 'Spider-Man', note: 'Keep it selective. Do not let the Clone Saga build a nest in your brain.', issues: M(R('Web of Spider-Man', 117, 119), R('Amazing Spider-Man', 394, 396), R('Spider-Man', 51, 53), R('Peter Parker, The Spectacular Spider-Man', 217, 219), I('Spider-Man Unlimited', ['#7'])) },
       { title: 'X-Men: Age of Apocalypse', family: 'X-Men', note: 'Event lock. Great alternate timeline. This uses the main collected core.', issues: M(I('X-Men: Alpha', ['#1']), R('Astonishing X-Men', 1, 4), R('Amazing X-Men', 1, 4), R('Gambit and the X-Ternals', 1, 4), R('Generation Next', 1, 4), R('Weapon X', 1, 4), R('Factor X', 1, 4), R('X-Calibre', 1, 4), R('X-Man', 1, 4), R('X-Universe', 1, 2), I('X-Men: Omega', ['#1'])) },
@@ -184,6 +196,7 @@ const phases = [
       { title: 'Astonishing X-Men part 1', family: 'X-Men', note: 'Clean team book after Morrison.', issues: R('Astonishing X-Men', 1, 12) },
       { title: 'Daredevil: Bendis/Maleev part 5', family: 'Daredevil', note: 'Matt’s life keeps tightening.', issues: R('Daredevil vol. 2', 66, 75) },
       { title: 'Doctor Strange: The Oath', family: 'Doctor Strange', note: 'Best short modern Strange.', issues: R('Doctor Strange: The Oath', 1, 5) },
+      { title: 'Thanos 2003 solo run', family: 'Thanos / Cosmic Marvel', writer: 'Jim Starlin and Keith Giffen', years: '2003-2004', tags: ['Essential', 'Cosmic'], note: 'A modern Thanos solo stretch that bridges classic Starlin Thanos and later cosmic Marvel.', issues: R('Thanos 2003', 1, 12) },
       { title: 'Astonishing X-Men part 2', family: 'X-Men', note: 'Finish Whedon/Cassaday.', issues: M(R('Astonishing X-Men', 13, 24), I('Giant-Size Astonishing X-Men', ['#1'])) },
       { title: 'Daredevil: The Murdock Papers', family: 'Daredevil', note: 'Bendis finale.', issues: R('Daredevil vol. 2', 76, 81) },
       { title: 'House of M', family: 'X-Men / Avengers', note: 'Event lock. Mutant status quo bomb.', issues: R('House of M', 1, 8) },
@@ -227,7 +240,8 @@ const phases = [
       { title: 'Thor: JMS finale', family: 'Thor', note: 'Finish JMS Thor.', issues: M(R('Thor', 600, 603), I('Thor Giant-Size Finale', ['#1'])) },
       { title: 'Captain America: Reborn', family: 'Captain America', note: 'Resolves Steve’s post-death status.', issues: R('Captain America: Reborn', 1, 6) },
       { title: 'Daredevil: Shadowland/Reborn bridge', family: 'Daredevil', note: 'Not top-tier, but it bridges into Waid.', issues: M(R('Shadowland', 1, 5), R('Daredevil', 508, 512), R('Daredevil: Reborn', 1, 4)) },
-      { title: 'Siege', family: 'Avengers / Thor', note: 'Event lock. Norman attacks Asgard.', issues: M(R('Siege', 1, 4), R('Thor', 607, 610)) }
+      { title: 'Siege', family: 'Avengers / Thor', note: 'Event lock. Norman attacks Asgard.', issues: M(R('Siege', 1, 4), R('Thor', 607, 610)) },
+      { title: 'Thanos Imperative', family: 'Thanos / Cosmic Marvel', writer: 'Dan Abnett and Andy Lanning', years: '2010', tags: ['Essential', 'Cosmic', 'Event'], note: 'Event lock. The Annihilation-era cosmic line crashes into Thanos and the Cancerverse.', issues: M(I('The Thanos Imperative: Ignition', ['#1']), R('The Thanos Imperative', 1, 6), I('The Thanos Imperative: Devastation', ['#1'])) }
     ]
   },
   {
@@ -291,19 +305,237 @@ const phases = [
   },
   {
     id: 'phase-9',
-    name: 'Bonus',
-    title: 'Post-Secret Wars bonus shelf',
-    desc: 'Optional modern greats after the main pre-reset roadmap.',
+    name: 'Phase 9',
+    title: 'Post-Secret Wars rebuild: 2015-2018',
+    desc: 'Marvel rebuilds after Secret Wars: street heroes, new Avengers structures, restored Fantastic Four momentum, and major Thanos material.',
     blocks: [
-      { title: 'Daredevil by Soule', family: 'Daredevil', note: 'Legal Daredevil, Blindspot, Muse, and Mayor Fisk.', issues: M(R('Daredevil vol. 5', 1, 28), R('Daredevil', 595, 612)) },
-      { title: 'Daredevil by Zdarsky part 1', family: 'Daredevil', note: 'One of the best modern Daredevil eras.', issues: M(R('Daredevil 2019', 1, 36), I('Daredevil Annual 2020', ['#1'])) },
-      { title: 'Devil’s Reign and Woman Without Fear', family: 'Daredevil', note: 'Kingpin’s anti-hero crackdown and Elektra’s Daredevil role.', issues: M(R('Devil’s Reign', 1, 6), I('Devil’s Reign: Omega', ['#1']), R('Daredevil: Woman Without Fear', 1, 3)) },
-      { title: 'Daredevil by Zdarsky finale', family: 'Daredevil', note: 'Red Fist Saga finale.', issues: R('Daredevil 2022', 1, 14) },
-      { title: 'Immortal Hulk', family: 'Hulk', note: 'Horror Hulk masterpiece. Long, but worth it.', issues: R('Immortal Hulk', 1, 50) },
-      { title: 'Defenders by Al Ewing', family: 'Defenders', note: 'Reality-architecture weirdness.', issues: M(R('Defenders 2021', 1, 5), R('Defenders: Beyond', 1, 5)) }
+      { title: 'Doctor Strange by Jason Aaron part 1', family: 'Doctor Strange', writer: 'Jason Aaron', years: '2015-2016', tags: ['Full run', 'Essential'], note: 'The modern Doctor Strange relaunch. Magic gets a cost, which makes Strange feel vulnerable again.', issues: R('Doctor Strange 2015', 1, 10) },
+      { title: 'Doctor Strange by Jason Aaron part 2', family: 'Doctor Strange', writer: 'Jason Aaron', years: '2016-2017', tags: ['Full run'], note: 'Finish Aaron’s main Strange stretch before the book shifts writers.', issues: R('Doctor Strange 2015', 11, 20) },
+      { title: 'Doctor Strange: Hopeless and Cates bridge', family: 'Doctor Strange', writer: 'Dennis Hopeless, Donny Cates', years: '2017-2018', tags: ['Full run'], note: 'Bridge material into Cates’ Loki/Sorcerer Supreme era.', issues: M(R('Doctor Strange 2015', 21, 26), R('Doctor Strange', 381, 390)) },
+      { title: 'Daredevil by Soule part 1', family: 'Daredevil', writer: 'Charles Soule', years: '2015-2017', tags: ['Full run'], note: 'Legal Daredevil, Blindspot, Muse, and a more lawyer-centered Matt.', issues: R('Daredevil vol. 5', 1, 14) },
+      { title: 'Daredevil by Soule part 2', family: 'Daredevil', writer: 'Charles Soule', years: '2017-2018', tags: ['Full run'], note: 'Mayor Fisk pressure and the road into the legacy-numbered finale.', issues: M(R('Daredevil vol. 5', 15, 28), R('Daredevil', 595, 612)) },
+      { title: 'The Vision by Tom King', family: 'Vision & Scarlet Witch / Avengers', writer: 'Tom King', years: '2015-2016', tags: ['Essential', 'Vision/Wanda'], note: 'Vision tries to build a normal family. Quiet horror in suburban clothing.', issues: R('Vision 2015', 1, 12) },
+      { title: 'Scarlet Witch by James Robinson', family: 'Vision & Scarlet Witch / Avengers', writer: 'James Robinson', years: '2015-2017', tags: ['Vision/Wanda'], note: 'Wanda explores witchcraft, heritage, and repair after years of being treated like a walking plot bomb.', issues: R('Scarlet Witch 2015', 1, 15) },
+      { title: 'All-New All-Different Avengers', family: 'Avengers', writer: 'Mark Waid', years: '2015-2016', tags: ['Full run'], note: 'Post-Secret Wars Avengers with a younger, mixed-generation roster.', issues: M(I('FCBD All-New All-Different Avengers', ['#1']), R('All-New All-Different Avengers', 1, 15), I('All-New All-Different Avengers Annual', ['#1'])) },
+      { title: 'Avengers by Mark Waid', family: 'Avengers', writer: 'Mark Waid', years: '2016-2018', tags: ['Full run'], note: 'The follow-up Avengers volume before No Surrender.', issues: R('Avengers 2016', 1, 11) },
+      { title: 'Avengers: No Surrender', family: 'Avengers', writer: 'Mark Waid, Al Ewing, Jim Zub', years: '2018', tags: ['Essential', 'Event'], note: 'Event lock. Weekly Avengers epic that restores the team’s big-board energy.', issues: R('Avengers', 675, 690) },
+      { title: 'Thanos by Lemire and Cates part 1', family: 'Thanos / Cosmic Marvel', writer: 'Jeff Lemire', years: '2016-2017', tags: ['Full run', 'Cosmic'], note: 'Thanos returns to center stage in a modern solo run.', issues: R('Thanos 2016', 1, 12) },
+      { title: 'Thanos Wins', family: 'Thanos / Cosmic Marvel', writer: 'Donny Cates', years: '2017-2018', tags: ['Essential', 'Cosmic'], note: 'Future Thanos, Cosmic Ghost Rider, and one of the most memorable modern Thanos arcs.', issues: R('Thanos 2016', 13, 18) },
+      { title: 'Marvel Two-In-One: Fate of the Four', family: 'Fantastic Four', writer: 'Chip Zdarsky', years: '2017-2018', tags: ['Essential'], note: 'Ben and Johnny search for Reed, Sue, and the missing family after Secret Wars.', issues: R('Marvel Two-In-One 2017', 1, 12) },
+      { title: 'Fantastic Four by Dan Slott part 1', family: 'Fantastic Four', writer: 'Dan Slott', years: '2018-2019', tags: ['Full run'], note: 'The FF return to their own title after years away.', issues: R('Fantastic Four 2018', 1, 12) },
+      { title: 'Defenders street-level', family: 'Defenders / Daredevil', writer: 'Brian Michael Bendis', years: '2017-2018', tags: ['Optional'], note: 'The Netflix-style Defenders team: Daredevil, Jessica Jones, Luke Cage, and Iron Fist.', issues: R('Defenders 2017', 1, 10) }
+    ]
+  },
+  {
+    id: 'phase-10',
+    name: 'Phase 10',
+    title: 'Fresh Start, Krakoa, Empyre, and modern classics: 2018-2022',
+    desc: 'The big modern shelf: Immortal Hulk, Krakoa, Aaron Avengers, Slott FF, Zdarsky Daredevil, and Thor’s next era.',
+    blocks: [
+      { title: 'Immortal Hulk part 1', family: 'Hulk', writer: 'Al Ewing', years: '2018-2019', tags: ['Essential', 'Full run'], note: 'Horror Hulk masterpiece begins. Body horror, guilt, religion, and gamma mythology.', issues: R('Immortal Hulk', 1, 15) },
+      { title: 'Immortal Hulk part 2', family: 'Hulk', writer: 'Al Ewing', years: '2019-2020', tags: ['Essential', 'Full run'], note: 'The run deepens from monster horror into cosmic theology.', issues: R('Immortal Hulk', 16, 30) },
+      { title: 'Immortal Hulk part 3', family: 'Hulk', writer: 'Al Ewing', years: '2020-2021', tags: ['Essential', 'Full run'], note: 'The final descent. Read slowly; this one has teeth.', issues: M(R('Immortal Hulk', 31, 50), I('Immortal Hulk: The Threshing Place', ['#1'])) },
+      { title: 'Avengers by Jason Aaron part 1', family: 'Avengers', writer: 'Jason Aaron', years: '2018-2019', tags: ['Full run'], note: 'Big, loud Avengers with prehistoric Avengers mythology and a broad rotating cast.', issues: R('Avengers 2018', 1, 17) },
+      { title: 'Avengers by Jason Aaron part 2', family: 'Avengers', writer: 'Jason Aaron', years: '2019-2021', tags: ['Full run'], note: 'Moon Knight, vampires, Starbrand, and more giant-team machinery.', issues: R('Avengers 2018', 18, 44) },
+      { title: 'Avengers by Jason Aaron finale', family: 'Avengers', writer: 'Jason Aaron', years: '2021-2023', tags: ['Full run'], note: 'Finish Aaron’s Avengers era, including the multiversal Avengers Forever companion.', issues: M(R('Avengers 2018', 45, 66), R('Avengers Forever 2021', 1, 15), I('Avengers Assemble Alpha', ['#1']), I('Avengers Assemble Omega', ['#1'])) },
+      { title: 'Fantastic Four by Dan Slott part 2', family: 'Fantastic Four', writer: 'Dan Slott', years: '2019-2020', tags: ['Full run'], note: 'Slott FF continues into bigger family and cosmic stakes.', issues: R('Fantastic Four 2018', 13, 25) },
+      { title: 'Empyre core', family: 'Avengers / Fantastic Four', writer: 'Al Ewing and Dan Slott', years: '2020', tags: ['Event'], note: 'Event lock. Kree/Skrull/Cotati event with Avengers and Fantastic Four at the center.', issues: M(I('Empyre: Avengers', ['#0']), I('Empyre: Fantastic Four', ['#0']), R('Empyre', 1, 6), I('Empyre: Aftermath Avengers', ['#1']), I('Empyre: Fallout Fantastic Four', ['#1'])) },
+      { title: 'Fantastic Four by Dan Slott finale', family: 'Fantastic Four', writer: 'Dan Slott', years: '2020-2022', tags: ['Full run'], note: 'Finish Slott’s FF run before Ryan North takes over.', issues: R('Fantastic Four 2018', 26, 46) },
+      { title: 'House of X / Powers of X', family: 'X-Men', writer: 'Jonathan Hickman', years: '2019', tags: ['Essential', 'Event'], note: 'Event lock. Krakoa begins. This is the modern X-Men reset point.', issues: M(R('House of X', 1, 6), R('Powers of X', 1, 6)) },
+      { title: 'X-Men by Hickman part 1', family: 'X-Men', writer: 'Jonathan Hickman', years: '2019-2020', tags: ['Full run', 'Essential'], note: 'Krakoa’s main X-Men title starts as a constellation of big mutant ideas.', issues: R('X-Men 2019', 1, 11) },
+      { title: 'X of Swords', family: 'X-Men', writer: 'Tini Howard, Jonathan Hickman, Vita Ayala, Gerry Duggan, Benjamin Percy, Zeb Wells, Leah Williams', years: '2020', tags: ['Event'], note: 'Event lock. Krakoa, Arakko, Apocalypse, swords, and mutant mythology expanding like a living map.', issues: M(I('X of Swords: Creation', ['#1']), R('X-Factor 2020', 4, 4), R('Wolverine 2020', 6, 7), R('X-Force 2019', 13, 14), R('Marauders 2019', 13, 15), R('Hellions', 5, 6), R('New Mutants 2019', 13, 13), R('Cable 2020', 5, 6), R('Excalibur 2019', 13, 15), R('X-Men 2019', 13, 15), I('X of Swords: Stasis', ['#1']), I('X of Swords: Destruction', ['#1'])) },
+      { title: 'X-Men by Hickman part 2 and Inferno', family: 'X-Men', writer: 'Jonathan Hickman', years: '2021', tags: ['Full run', 'Essential'], note: 'Finish Hickman’s main X-Men and his Krakoa exit mini.', issues: M(R('X-Men 2019', 16, 21), R('Inferno 2021', 1, 4)) },
+      { title: 'Daredevil by Zdarsky part 1', family: 'Daredevil', writer: 'Chip Zdarsky', years: '2019-2021', tags: ['Essential', 'Full run'], note: 'One of the best modern Daredevil eras: guilt, prison, law, Elektra, Fisk.', issues: M(R('Daredevil 2019', 1, 18), I('Daredevil Annual 2020', ['#1'])) },
+      { title: 'Daredevil by Zdarsky part 2', family: 'Daredevil', writer: 'Chip Zdarsky', years: '2020-2021', tags: ['Essential', 'Full run'], note: 'Matt’s consequences and Elektra’s role intensify.', issues: R('Daredevil 2019', 19, 36) },
+      { title: 'Devil’s Reign and Woman Without Fear', family: 'Daredevil / Avengers', writer: 'Chip Zdarsky', years: '2021-2022', tags: ['Essential', 'Event'], note: 'Event lock. Kingpin weaponizes the law against heroes; Elektra’s Daredevil era matters here.', issues: M(R('Devil’s Reign', 1, 6), I('Devil’s Reign: Omega', ['#1']), R('Daredevil: Woman Without Fear', 1, 3)) },
+      { title: 'Thor by Donny Cates', family: 'Thor', writer: 'Donny Cates and Torunn Grønbekk', years: '2020-2023', tags: ['Full run'], note: 'Black Winter, cosmic Thor, and the bridge toward Al Ewing’s Thor.', issues: R('Thor 2020', 1, 35) },
+      { title: 'Hulk by Donny Cates', family: 'Hulk', writer: 'Donny Cates and Ryan Ottley', years: '2021-2023', tags: ['Full run'], note: 'A louder sci-fi Hulk run after Immortal Hulk. Not as essential, but useful before the 2023 horror turn.', issues: R('Hulk 2021', 1, 14) },
+      { title: 'Captain America by Ta-Nehisi Coates', family: 'Captain America', writer: 'Ta-Nehisi Coates', years: '2018-2021', tags: ['Full run'], note: 'A political Steve Rogers run dealing with damaged trust after Secret Empire-era fallout.', issues: R('Captain America 2018', 1, 30) },
+      { title: 'Doctor Strange: Death, Clea, and return', family: 'Doctor Strange', writer: 'Jed MacKay', years: '2021-2024', tags: ['Essential', 'Full run'], note: 'MacKay’s Strange line: Stephen dies, Clea becomes Sorcerer Supreme, and the story loops back into Stephen’s return.', issues: M(R('Death of Doctor Strange', 1, 5), R('Strange 2022', 1, 10), R('Doctor Strange 2023', 1, 18)) },
+      { title: 'Defenders by Al Ewing', family: 'Defenders / Doctor Strange', writer: 'Al Ewing', years: '2021-2022', tags: ['Essential'], note: 'Reality-architecture weirdness. The Defenders concept at its most cosmic and clever.', issues: M(R('Defenders 2021', 1, 5), R('Defenders: Beyond', 1, 5)) }
+    ]
+  },
+  {
+    id: 'phase-11',
+    name: 'Phase 11',
+    title: 'Current-era shelf: 2022-2026',
+    desc: 'Current and near-current runs as of June 2026. These are built as updateable shelves, so you can extend the issue ranges later.',
+    blocks: [
+      { title: 'Ryan North Fantastic Four part 1', family: 'Fantastic Four', writer: 'Ryan North', years: '2022-2024', tags: ['Essential', 'Full run'], note: 'Excellent modern FF: smart, funny, science-driven, and very family-focused.', issues: R('Fantastic Four 2022', 1, 16) },
+      { title: 'Ryan North Fantastic Four part 2', family: 'Fantastic Four', writer: 'Ryan North', years: '2024-2025', tags: ['Essential', 'Full run'], note: 'The run keeps its puzzle-box science heart while building toward the 2025 relaunch.', issues: R('Fantastic Four 2022', 17, 33) },
+      { title: 'Ryan North / Humberto Ramos Fantastic Four', family: 'Fantastic Four', writer: 'Ryan North', years: '2025-2026', tags: ['Current', 'Full run'], note: 'Current FF volume as of June 2026. Add new issues later as they release.', issues: R('Fantastic Four 2025', 1, 10) },
+      { title: 'Avengers by Jed MacKay part 1', family: 'Avengers', writer: 'Jed MacKay', years: '2023-2024', tags: ['Full run', 'Current'], note: 'Current Avengers era with a tighter, mission-driven team.', issues: R('Avengers 2023', 1, 12) },
+      { title: 'Blood Hunt core', family: 'Avengers / Doctor Strange', writer: 'Jed MacKay', years: '2024', tags: ['Event'], note: 'Event lock. Major vampire event that heavily touches Doctor Strange and Avengers-era Marvel.', issues: R('Blood Hunt', 1, 5) },
+      { title: 'Avengers by Jed MacKay part 2', family: 'Avengers', writer: 'Jed MacKay', years: '2024-2025', tags: ['Full run', 'Current'], note: 'Continue MacKay’s Avengers through Kang/Twilight Court-era machinery.', issues: R('Avengers 2023', 13, 24) },
+      { title: 'Avengers by Jed MacKay part 3', family: 'Avengers', writer: 'Jed MacKay', years: '2025-2026', tags: ['Full run', 'Current'], note: 'Current shelf through issue #35, the latest verified issue I added to the tracker.', issues: R('Avengers 2023', 25, 35) },
+      { title: 'From the Ashes: X-Men by Jed MacKay part 1', family: 'X-Men', writer: 'Jed MacKay', years: '2024-2025', tags: ['Full run', 'Current'], note: 'Post-Krakoa X-Men starting point. Cyclops-led core team.', issues: R('X-Men 2024', 1, 12) },
+      { title: 'From the Ashes: X-Men by Jed MacKay part 2', family: 'X-Men', writer: 'Jed MacKay', years: '2025-2026', tags: ['Full run', 'Current'], note: 'Includes the Age of Revelation epilogue area through #23.', issues: R('X-Men 2024', 13, 23) },
+      { title: 'From the Ashes: Uncanny X-Men by Gail Simone part 1', family: 'X-Men', writer: 'Gail Simone', years: '2024-2025', tags: ['Full run', 'Current'], note: 'Rogue-led Uncanny side of the current X-line.', issues: R('Uncanny X-Men 2024', 1, 16) },
+      { title: 'From the Ashes: Uncanny X-Men by Gail Simone part 2', family: 'X-Men', writer: 'Gail Simone', years: '2025-2026', tags: ['Full run', 'Current'], note: 'Current Uncanny shelf through #32 as listed by Marvel.', issues: R('Uncanny X-Men 2024', 17, 32) },
+      { title: 'Daredevil by Saladin Ahmed', family: 'Daredevil', writer: 'Saladin Ahmed', years: '2023-2025', tags: ['Full run'], note: 'Post-Zdarsky Daredevil era before the 2026 relaunch.', issues: R('Daredevil 2023', 1, 25) },
+      { title: 'Daredevil by Stephanie Phillips', family: 'Daredevil', writer: 'Stephanie Phillips', years: '2026', tags: ['Current'], note: 'Current Daredevil relaunch shelf. I added the verified launch issue; extend as new issues arrive.', issues: I('Daredevil 2026', ['#1']) },
+      { title: 'Incredible Hulk by Phillip Kennedy Johnson', family: 'Hulk', writer: 'Phillip Kennedy Johnson', years: '2023-2026', tags: ['Current', 'Full run'], note: 'Modern horror-monster Hulk after the Cates/Ottley sci-fi run.', issues: R('Incredible Hulk 2023', 1, 30) },
+      { title: 'Immortal Thor', family: 'Thor', writer: 'Al Ewing', years: '2023-2025', tags: ['Essential', 'Full run'], note: 'Al Ewing’s mythic Thor era. Highly worth reading after Aaron/Cates Thor.', issues: R('Immortal Thor', 1, 25) },
+      { title: 'Mortal Thor', family: 'Thor', writer: 'Al Ewing', years: '2025-2026', tags: ['Current', 'Full run'], note: 'Current continuation of Ewing’s Thor as of June 2026.', issues: R('Mortal Thor', 1, 13) },
+      { title: 'Doctor Strange of Asgard', family: 'Doctor Strange / Thor', writer: 'Derek Landy', years: '2025', tags: ['Full run'], note: 'Stephen becomes tangled in Asgardian magic and politics.', issues: R('Doctor Strange of Asgard', 1, 5) },
+      { title: 'Doctor Strange 2025', family: 'Doctor Strange / Thor', writer: 'Derek Landy', years: '2025-2026', tags: ['Current', 'Full run'], note: 'Current Doctor Strange ongoing shelf through #7, published June 2026.', issues: R('Doctor Strange 2025', 1, 7) },
+      { title: 'Captain America by JMS', family: 'Captain America', writer: 'J. Michael Straczynski', years: '2023-2025', tags: ['Full run'], note: 'Recent Cap run before the Zdarsky relaunch.', issues: R('Captain America 2023', 1, 16) },
+      { title: 'Captain America by Chip Zdarsky', family: 'Captain America', writer: 'Chip Zdarsky', years: '2025-2026', tags: ['Current', 'Full run'], note: 'Current Cap shelf through Marvel’s listed #13.', issues: R('Captain America 2025', 1, 13) },
+      { title: 'Amazing Spider-Man by Joe Kelly', family: 'Spider-Man', writer: 'Joe Kelly', years: '2025-2026', tags: ['Current', 'Full run'], note: 'Current Amazing Spider-Man shelf through #27 as listed by Marvel.', issues: R('Amazing Spider-Man 2025', 1, 27) },
+      { title: 'Vision and Scarlet Witch 2025', family: 'Vision & Scarlet Witch / Avengers', writer: 'Steve Orlando', years: '2025', tags: ['Vision/Wanda', 'Current'], note: 'Modern reunion mini for Marvel’s classic star-crossed Avengers couple.', issues: R('Vision and the Scarlet Witch 2025', 1, 5) }
     ]
   }
+
 ];
+
+
+const blockMeta = {
+  'Captain America historical debut': { writer: 'Joe Simon and Jack Kirby', years: '1941', tags: ['Essential'] },
+  'Fantastic Four begins': { writer: 'Stan Lee and Jack Kirby', years: '1961', tags: ['Essential'] },
+  'Hulk origin': { writer: 'Stan Lee and Jack Kirby', years: '1962', tags: ['Essential'] },
+  'Thor origin and Loki foundation': { writer: 'Stan Lee, Larry Lieber, Jack Kirby', years: '1962', tags: ['Essential'] },
+  'Spider-Man origin': { writer: 'Stan Lee and Steve Ditko', years: '1962', tags: ['Essential'] },
+  'Doctor Strange origin pack': { writer: 'Stan Lee and Steve Ditko', years: '1963', tags: ['Essential'] },
+  'Avengers form and Cap returns': { writer: 'Stan Lee and Jack Kirby', years: '1963-1964', tags: ['Essential'] },
+  'Spider-Man early rogues 1': { writer: 'Stan Lee and Steve Ditko', years: '1963', tags: ['Essential'] },
+  'Fantastic Four early villains': { writer: 'Stan Lee and Jack Kirby', years: '1962', tags: ['Essential'] },
+  'X-Men historical start': { writer: 'Stan Lee and Jack Kirby', years: '1963', tags: ['Essential'] },
+  'Avengers roster identity': { writer: 'Stan Lee and Jack Kirby', years: '1965', tags: ['Essential'] },
+  'Spider-Man early rogues 2': { writer: 'Stan Lee and Steve Ditko', years: '1964', tags: ['Essential'] },
+  'Doctor Strange: Dormammu, Clea, and Ditko magic 1': { writer: 'Stan Lee and Steve Ditko', years: '1964-1965', tags: ['Essential'] },
+  'Doctor Strange: Ditko magic 2': { writer: 'Stan Lee and Steve Ditko', years: '1965-1966', tags: ['Essential'] },
+  'Fantastic Four world-building 2': { writer: 'Stan Lee and Jack Kirby', years: '1965-1966', tags: ['Essential'] },
+  'Spider-Man: If This Be My Destiny…!': { writer: 'Stan Lee and Steve Ditko', years: '1965-1966', tags: ['Essential'] },
+  'Spider-Man: Green Goblin Unmasked': { writer: 'Stan Lee and John Romita Sr.', years: '1966', tags: ['Essential'] },
+  'Fantastic Four: Doom steals cosmic power': { writer: 'Stan Lee and Jack Kirby', years: '1966', tags: ['Essential'] },
+  'Avengers: Vision arrives': { writer: 'Roy Thomas and John Buscema', years: '1968', tags: ['Essential', 'Vision/Wanda'] },
+  'Spider-Man: Spider-Man No More!': { writer: 'Stan Lee and John Romita Sr.', years: '1967', tags: ['Essential'] },
+  'Avengers: Kree-Skrull War': { writer: 'Roy Thomas', years: '1971-1972', tags: ['Essential', 'Event'] },
+  'Spider-Man: The Night Gwen Stacy Died': { writer: 'Gerry Conway', years: '1973', tags: ['Essential'] },
+  'Avengers / Defenders War': { writer: 'Steve Englehart', years: '1973', tags: ['Essential', 'Event'] },
+  'Captain America: Secret Empire': { writer: 'Steve Englehart', years: '1974', tags: ['Essential'] },
+  'Captain America: Nomad aftermath': { writer: 'Steve Englehart', years: '1974-1975', tags: ['Essential'] },
+  'X-Men: Second Genesis begins': { writer: 'Len Wein, Chris Claremont, Dave Cockrum', years: '1975', tags: ['Essential'] },
+  'X-Men: All-New team deepens': { writer: 'Chris Claremont', years: '1976-1977', tags: ['Essential'] },
+  'Avengers: Korvac Saga': { writer: 'Jim Shooter', years: '1977-1978', tags: ['Essential', 'Event'] },
+  'X-Men: Proteus Saga': { writer: 'Chris Claremont', years: '1979', tags: ['Essential'] },
+  'Daredevil: The Man Without Fear': { writer: 'Frank Miller', years: '1993-1994', tags: ['Essential'] },
+  'X-Men: Dark Phoenix Saga': { writer: 'Chris Claremont', years: '1980', tags: ['Essential', 'Event'] },
+  'Daredevil: Miller/Janson part 1': { writer: 'Frank Miller and Roger McKenzie', years: '1979-1980', tags: ['Essential'] },
+  'X-Men: Days of Future Past': { writer: 'Chris Claremont', years: '1981', tags: ['Essential'] },
+  'Spider-Man: Nothing Can Stop the Juggernaut!': { writer: 'Roger Stern', years: '1982', tags: ['Essential'] },
+  'Fantastic Four: Byrne part 1': { writer: 'John Byrne', years: '1981-1982', tags: ['Full run', 'Essential'] },
+  'Daredevil: Elektra Saga part 1': { writer: 'Frank Miller', years: '1981-1982', tags: ['Essential'] },
+  'X-Men: God Loves, Man Kills': { writer: 'Chris Claremont', years: '1982', tags: ['Essential'] },
+  'Fantastic Four: Byrne cosmic part': { writer: 'John Byrne', years: '1982', tags: ['Full run', 'Essential'] },
+  'Spider-Man: The Kid Who Collects Spider-Man': { writer: 'Roger Stern', years: '1984', tags: ['Essential'] },
+  'Daredevil: Elektra Saga part 2': { writer: 'Frank Miller', years: '1982', tags: ['Essential'] },
+  'X-Men: Brood Saga': { writer: 'Chris Claremont', years: '1982-1983', tags: ['Essential'] },
+  'Spider-Man: Alien Costume Saga': { writer: 'Roger Stern and Tom DeFalco', years: '1984-1985', tags: ['Essential'] },
+  'Daredevil: Miller finale': { writer: 'Frank Miller', years: '1982-1983', tags: ['Essential'] },
+  'X-Men: From the Ashes': { writer: 'Chris Claremont', years: '1983', tags: ['Essential'] },
+  'New Mutants: Demon Bear Saga': { writer: 'Chris Claremont', years: '1984', tags: ['Essential'] },
+  'Spider-Man: Death of Jean DeWolff': { writer: 'Peter David', years: '1985-1986', tags: ['Essential'] },
+  'Fantastic Four: Malice / Sue Storm': { writer: 'John Byrne', years: '1985', tags: ['Full run', 'Essential'] },
+  'Daredevil: Born Again': { writer: 'Frank Miller', years: '1986', tags: ['Essential'] },
+  'Thor: Beta Ray Bill': { writer: 'Walt Simonson', years: '1983', tags: ['Essential'] },
+  'Hulk: Peter David begins': { writer: 'Peter David', years: '1987-1988', tags: ['Essential'] },
+  'Thor: Surtur Saga': { writer: 'Walt Simonson', years: '1984-1985', tags: ['Essential', 'Event'] },
+  'Hulk: Ground Zero / psychology': { writer: 'Peter David', years: '1988', tags: ['Essential'] },
+  'Spider-Man: Kraven’s Last Hunt': { writer: 'J.M. DeMatteis', years: '1987', tags: ['Essential', 'Event'] },
+  'Doctor Strange + Doom: Triumph and Torment': { writer: 'Roger Stern', years: '1989', tags: ['Essential'] },
+  'Spider-Man: Venom’s birth': { writer: 'David Michelinie', years: '1988-1989', tags: ['Essential'] },
+  'Avengers: Under Siege': { writer: 'Roger Stern', years: '1986-1987', tags: ['Essential'] },
+  'X-Men: Mutant Massacre': { writer: 'Chris Claremont and others', years: '1986', tags: ['Essential', 'Event'] },
+  'Daredevil: Typhoid Mary': { writer: 'Ann Nocenti', years: '1988-1989', tags: ['Essential'] },
+  'X-Men: Fall of the Mutants': { writer: 'Chris Claremont, Louise Simonson', years: '1988', tags: ['Essential', 'Event'] },
+  'X-Men: Inferno': { writer: 'Chris Claremont, Louise Simonson', years: '1988-1989', tags: ['Essential', 'Event'] },
+  'Fantastic Four: Simonson part 1': { writer: 'Walt Simonson', years: '1989-1990', tags: ['Full run', 'Essential'] },
+  'Fantastic Four: Simonson part 2': { writer: 'Walt Simonson', years: '1990-1991', tags: ['Full run', 'Essential'] },
+  'Captain America: Operation Rebirth': { writer: 'Mark Waid', years: '1995', tags: ['Essential'] },
+  'X-Men: X-Tinction Agenda': { writer: 'Chris Claremont and Louise Simonson', years: '1990', tags: ['Event'] },
+  'Daredevil: Last Rites': { writer: 'D.G. Chichester', years: '1992', tags: ['Essential'] },
+  'Hulk: Future Imperfect': { writer: 'Peter David', years: '1992-1993', tags: ['Essential'] },
+  'X-Men: Mutant Genesis': { writer: 'Chris Claremont', years: '1991', tags: ['Essential'] },
+  'Spider-Man: Maximum Carnage': { writer: 'Tom DeFalco, J.M. DeMatteis, Terry Kavanagh, David Michelinie', years: '1993', tags: ['Event'] },
+  'X-Men: X-Cutioner’s Song': { writer: 'Scott Lobdell, Fabian Nicieza, Peter David', years: '1992-1993', tags: ['Event'] },
+  'Daredevil: Guardian Devil': { writer: 'Kevin Smith', years: '1998-1999', tags: ['Essential'] },
+  'X-Men: Fatal Attractions': { writer: 'Scott Lobdell, Fabian Nicieza, Peter David, Larry Hama', years: '1993', tags: ['Event'] },
+  'X-Men: Age of Apocalypse': { writer: 'Multiple X-writers', years: '1995', tags: ['Essential', 'Event'] },
+  'Avengers Forever': { writer: 'Kurt Busiek and Roger Stern', years: '1998-2000', tags: ['Essential'] },
+  'Avengers: Busiek/Pérez relaunch': { writer: 'Kurt Busiek', years: '1998', tags: ['Essential'] },
+  'Avengers: Ultron Unlimited': { writer: 'Kurt Busiek', years: '1999', tags: ['Essential'] },
+  'Avengers: Kang Dynasty': { writer: 'Kurt Busiek', years: '2001-2002', tags: ['Essential', 'Event'] },
+  'Ultimate Spider-Man origin': { writer: 'Brian Michael Bendis', years: '2000-2001', tags: ['Essential'] },
+  'New X-Men part 1': { writer: 'Grant Morrison', years: '2001', tags: ['Essential', 'Full run'] },
+  'New X-Men part 2': { writer: 'Grant Morrison', years: '2001-2002', tags: ['Essential', 'Full run'] },
+  'New X-Men part 3': { writer: 'Grant Morrison', years: '2002-2003', tags: ['Essential', 'Full run'] },
+  'New X-Men part 4': { writer: 'Grant Morrison', years: '2003-2004', tags: ['Essential', 'Full run'] },
+  'Spider-Man: Blue': { writer: 'Jeph Loeb', years: '2002-2003', tags: ['Essential'] },
+  'Daredevil: Bendis/Maleev part 1': { writer: 'Brian Michael Bendis', years: '2001-2002', tags: ['Essential', 'Full run'] },
+  'Daredevil: Bendis/Maleev part 2': { writer: 'Brian Michael Bendis', years: '2002-2003', tags: ['Essential', 'Full run'] },
+  'Daredevil: Bendis/Maleev part 3': { writer: 'Brian Michael Bendis', years: '2003', tags: ['Essential', 'Full run'] },
+  'Daredevil: Bendis/Maleev part 4': { writer: 'Brian Michael Bendis', years: '2004', tags: ['Essential', 'Full run'] },
+  'Daredevil: Bendis/Maleev part 5': { writer: 'Brian Michael Bendis', years: '2004-2005', tags: ['Essential', 'Full run'] },
+  'Daredevil: The Murdock Papers': { writer: 'Brian Michael Bendis', years: '2005-2006', tags: ['Essential', 'Full run'] },
+  'Fantastic Four: Waid/Wieringo part 1': { writer: 'Mark Waid', years: '2002-2003', tags: ['Essential', 'Full run'] },
+  'Fantastic Four: Waid part 2': { writer: 'Mark Waid', years: '2003', tags: ['Essential', 'Full run'] },
+  'Fantastic Four: Waid part 3': { writer: 'Mark Waid', years: '2004', tags: ['Essential', 'Full run'] },
+  'Fantastic Four: Waid part 4': { writer: 'Mark Waid', years: '2004-2005', tags: ['Essential', 'Full run'] },
+  'Astonishing X-Men part 1': { writer: 'Joss Whedon', years: '2004-2005', tags: ['Essential', 'Full run'] },
+  'Astonishing X-Men part 2': { writer: 'Joss Whedon', years: '2005-2008', tags: ['Essential', 'Full run'] },
+  'House of M': { writer: 'Brian Michael Bendis', years: '2005', tags: ['Essential', 'Event', 'Vision/Wanda'] },
+  'Captain America: Winter Soldier part 1': { writer: 'Ed Brubaker', years: '2005', tags: ['Essential'] },
+  'Captain America: Winter Soldier part 2': { writer: 'Ed Brubaker', years: '2005-2006', tags: ['Essential'] },
+  'Avengers Disassembled': { writer: 'Brian Michael Bendis', years: '2004', tags: ['Essential', 'Event', 'Vision/Wanda'] },
+  'New Avengers: Breakout': { writer: 'Brian Michael Bendis', years: '2005', tags: ['Essential'] },
+  'New Avengers: Illuminati': { writer: 'Brian Michael Bendis and Brian Reed', years: '2006-2008', tags: ['Essential'] },
+  'Civil War main event': { writer: 'Mark Millar', years: '2006-2007', tags: ['Essential', 'Event'] },
+  'Planet Hulk': { writer: 'Greg Pak', years: '2006-2007', tags: ['Essential', 'Event'] },
+  'World War Hulk': { writer: 'Greg Pak', years: '2007', tags: ['Essential', 'Event'] },
+  'Spider-Man: Back in Black': { writer: 'J. Michael Straczynski', years: '2007', tags: ['Essential'] },
+  'Thor: JMS rebirth part 1': { writer: 'J. Michael Straczynski', years: '2007-2008', tags: ['Essential', 'Full run'] },
+  'Secret Invasion': { writer: 'Brian Michael Bendis', years: '2008', tags: ['Event'] },
+  'Thor: JMS finale': { writer: 'J. Michael Straczynski', years: '2009', tags: ['Essential', 'Full run'] },
+  'Siege': { writer: 'Brian Michael Bendis', years: '2010', tags: ['Essential', 'Event'] },
+  'Hickman FF prologue': { writer: 'Jonathan Hickman', years: '2009', tags: ['Essential', 'Full run'] },
+  'Hickman FF: Solve Everything': { writer: 'Jonathan Hickman', years: '2009-2010', tags: ['Essential', 'Full run'] },
+  'Hickman FF: Three': { writer: 'Jonathan Hickman', years: '2010-2011', tags: ['Essential', 'Full run'] },
+  'Future Foundation begins': { writer: 'Jonathan Hickman', years: '2011', tags: ['Essential', 'Full run'] },
+  'Hickman FF second half 1': { writer: 'Jonathan Hickman', years: '2011-2012', tags: ['Essential', 'Full run'] },
+  'Hickman FF second half 2': { writer: 'Jonathan Hickman', years: '2012', tags: ['Essential', 'Full run'] },
+  'Hickman FF finale': { writer: 'Jonathan Hickman', years: '2012', tags: ['Essential', 'Full run'] },
+  'X-Men: Messiah Complex': { writer: 'Multiple X-writers', years: '2007-2008', tags: ['Essential', 'Event'] },
+  'X-Men: Second Coming': { writer: 'Multiple X-writers', years: '2010', tags: ['Essential', 'Event'] },
+  'Uncanny X-Force part 1': { writer: 'Rick Remender', years: '2010-2011', tags: ['Essential', 'Full run'] },
+  'Uncanny X-Force: Dark Angel Saga': { writer: 'Rick Remender', years: '2011', tags: ['Essential', 'Full run'] },
+  'Uncanny X-Force part 3': { writer: 'Rick Remender', years: '2011-2012', tags: ['Essential', 'Full run'] },
+  'Thor: The God Butcher / Godbomb': { writer: 'Jason Aaron', years: '2012-2013', tags: ['Essential'] },
+  'Daredevil by Waid part 1': { writer: 'Mark Waid', years: '2011-2012', tags: ['Essential', 'Full run'] },
+  'Daredevil by Waid part 2': { writer: 'Mark Waid', years: '2012-2013', tags: ['Essential', 'Full run'] },
+  'Daredevil by Waid part 3': { writer: 'Mark Waid', years: '2013-2014', tags: ['Essential', 'Full run'] },
+  'Daredevil by Waid vol. 4 part 1': { writer: 'Mark Waid', years: '2014', tags: ['Essential', 'Full run'] },
+  'Daredevil by Waid vol. 4 part 2': { writer: 'Mark Waid', years: '2014-2015', tags: ['Essential', 'Full run'] },
+  'X-Men: Schism': { writer: 'Jason Aaron', years: '2011', tags: ['Event'] },
+  'Avengers vs X-Men': { writer: 'Brian Michael Bendis, Jason Aaron, Ed Brubaker, Jonathan Hickman, Matt Fraction', years: '2012', tags: ['Essential', 'Event'] },
+  'Hickman Avengers opening': { writer: 'Jonathan Hickman', years: '2012-2013', tags: ['Essential', 'Full run'] },
+  'Hickman New Avengers opening': { writer: 'Jonathan Hickman', years: '2013', tags: ['Essential', 'Full run'] },
+  'Hickman Avengers build': { writer: 'Jonathan Hickman', years: '2013', tags: ['Essential', 'Full run'] },
+  'Infinity event': { writer: 'Jonathan Hickman', years: '2013', tags: ['Essential', 'Event'] },
+  'Hickman post-Infinity part 1': { writer: 'Jonathan Hickman', years: '2013-2014', tags: ['Essential', 'Full run'] },
+  'Hickman post-Infinity part 2': { writer: 'Jonathan Hickman', years: '2014', tags: ['Essential', 'Full run'] },
+  'Time Runs Out part 1': { writer: 'Jonathan Hickman', years: '2014', tags: ['Essential', 'Full run'] },
+  'Time Runs Out part 2': { writer: 'Jonathan Hickman', years: '2014-2015', tags: ['Essential', 'Full run'] },
+  'Time Runs Out part 3': { writer: 'Jonathan Hickman', years: '2015', tags: ['Essential', 'Full run'] },
+  'Time Runs Out finale': { writer: 'Jonathan Hickman', years: '2015', tags: ['Essential', 'Full run'] },
+  'Secret Wars 2015': { writer: 'Jonathan Hickman', years: '2015-2016', tags: ['Essential', 'Event'] }
+};
+
+phases.forEach(phase => {
+  phase.blocks.forEach(block => {
+    if (blockMeta[block.title]) Object.assign(block, blockMeta[block.title]);
+  });
+});
 
 phases.forEach((phase, phaseIndex) => {
   phase.blocks.forEach((block, blockIndex) => {
@@ -317,6 +549,7 @@ phases.forEach((phase, phaseIndex) => {
 let activePhaseId = phases[0].id;
 let searchTerm = '';
 let familyFilter = 'all';
+let essentialsOnly = false;
 let progress = loadProgress();
 let openBlocks = new Set();
 
@@ -324,6 +557,7 @@ const phaseTabs = document.getElementById('phaseTabs');
 const blocksContainer = document.getElementById('blocksContainer');
 const searchInput = document.getElementById('searchInput');
 const familySelect = document.getElementById('familyFilter');
+const essentialToggle = document.getElementById('essentialToggle');
 const currentPhaseLabel = document.getElementById('currentPhaseLabel');
 const phaseKicker = document.getElementById('phaseKicker');
 const phaseTitle = document.getElementById('phaseTitle');
@@ -386,10 +620,11 @@ function percentage(done, total) {
 }
 
 function matchesFilters(block) {
-  const haystack = [block.title, block.family, block.note, ...block.issues.map(issue => issue.label)].join(' ').toLowerCase();
+  const haystack = [block.title, block.family, block.note, block.writer, block.years, ...(block.tags || []), ...block.issues.map(issue => issue.label)].join(' ').toLowerCase();
   const matchesSearch = !searchTerm || haystack.includes(searchTerm.toLowerCase());
   const matchesFamily = familyFilter === 'all' || block.family.includes(familyFilter);
-  return matchesSearch && matchesFamily;
+  const matchesEssential = !essentialsOnly || (block.tags || []).includes('Essential');
+  return matchesSearch && matchesFamily && matchesEssential;
 }
 
 function renderPhaseTabs() {
@@ -456,6 +691,9 @@ function renderBlocks() {
             <h3>${escapeHtml(block.title)}</h3>
             <span class="block-meta">
               <span class="badge">${escapeHtml(block.family)}</span>
+              ${block.writer ? `<span class="badge writer">${escapeHtml(block.writer)}</span>` : ''}
+              ${block.years ? `<span class="badge year">${escapeHtml(block.years)}</span>` : ''}
+              ${(block.tags || []).map(tag => `<span class="badge ${tag === 'Essential' ? 'essential' : ''}">${escapeHtml(tag)}</span>`).join('')}
               <span class="badge">${done}/${total} issues</span>
               <span class="badge">${percentage(done, total)}%</span>
             </span>
@@ -464,6 +702,8 @@ function renderBlocks() {
         </button>
         <div class="block-body">
           <p class="block-note">${escapeHtml(block.note)}</p>
+          ${(block.writer || block.years) ? `<p class="block-credit"><strong>Writer:</strong> ${escapeHtml(block.writer || 'Unknown')} ${block.years ? `• <strong>Years:</strong> ${escapeHtml(block.years)}` : ''}</p>` : ''}
+          ${(block.tags || []).length ? `<div class="block-tags">${block.tags.map(tag => `<span class="tag-pill ${tag === 'Essential' ? 'essential' : ''}">${escapeHtml(tag)}</span>`).join('')}</div>` : ''}
           <div class="progress-shell"><div class="progress-fill" style="width:${percentage(done, total)}%"></div></div>
           <div class="block-actions">
             <button class="tool-btn" type="button" data-mark-block="${block.id}">Mark block read</button>
@@ -552,6 +792,11 @@ searchInput.addEventListener('input', event => {
 
 familySelect.addEventListener('change', event => {
   familyFilter = event.target.value;
+  renderBlocks();
+});
+
+essentialToggle.addEventListener('change', event => {
+  essentialsOnly = event.target.checked;
   renderBlocks();
 });
 

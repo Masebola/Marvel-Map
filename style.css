@@ -212,7 +212,7 @@ body.light .stat-card { background: rgba(255, 255, 255, 0.82); }
 
 .controls {
   display: grid;
-  grid-template-columns: 1fr 230px;
+  grid-template-columns: 1fr 230px 170px;
   gap: 14px;
   margin-bottom: 16px;
 }
@@ -430,4 +430,70 @@ select option { color: #111827; }
   .chevron { display: none; }
   .footer { flex-direction: column; align-items: stretch; }
   .footer-actions { display: grid; grid-template-columns: 1fr; }
+}
+
+
+.essential-switch {
+  align-self: end;
+  min-height: 47px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--text);
+  border-radius: 16px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  font-weight: 800;
+}
+
+.essential-switch input {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--accent);
+}
+
+.block-meta .badge.essential {
+  background: linear-gradient(135deg, rgba(245, 185, 66, 0.2), rgba(230, 36, 41, 0.15));
+  border-color: rgba(245, 185, 66, 0.45);
+  color: var(--accent-2);
+}
+
+.block-meta .badge.writer,
+.block-meta .badge.year {
+  color: var(--muted);
+}
+
+.block-tags {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin: 10px 0 8px;
+}
+
+.tag-pill {
+  font-size: 0.75rem;
+  font-weight: 850;
+  color: var(--text);
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+  padding: 5px 8px;
+  border-radius: 999px;
+}
+
+.tag-pill.essential {
+  color: var(--accent-2);
+  border-color: rgba(245, 185, 66, 0.45);
+}
+
+.block-credit {
+  color: var(--muted);
+  font-size: 0.88rem;
+  margin: 0 0 10px;
+}
+
+@media (max-width: 760px) {
+  .controls { grid-template-columns: 1fr; }
+  .essential-switch { justify-content: flex-start; }
 }
