@@ -8,11 +8,11 @@
   const DB_VERSION = 1;
   const STORE = 'issueProgress';
   const FALLBACK_KEY = 'marvel-reading-vault-v3-progress';
-  const SETTINGS_KEY = 'marvel-reading-vault-v3-settings';
-  const OLD_PROGRESS_KEYS = ['marvel-reading-vault-progress-v2', 'marvel-reading-vault-progress-v1'];
+  const SETTINGS_KEY = 'marvel-reading-vault-v4-settings';
+  const OLD_PROGRESS_KEYS = ['marvel-reading-vault-v3-progress', 'marvel-reading-vault-progress-v2', 'marvel-reading-vault-progress-v1'];
 
   const recommendationRank = { Peak: 1, Essential: 2, Current: 2, Recommended: 3, Optional: 4, Skim: 5, Skip: 6 };
-  const modeMax = { peak: 1, core: 2, recommended: 3, curated: 4, completionist: 6 };
+  const modeMax = { peak: 1, core: 2, recommended: 3, curated: 4 };
   const pageTitles = {
     dashboard: 'Dashboard', master: 'Master Flow', phases: 'Phases', roadmaps: 'Roadmaps', events: 'Events', stories: 'Great Stories',
     ultimate: 'Ultimate Universe', elseworlds: 'Elseworlds & Crossovers', stats: 'Stats', settings: 'Settings'
@@ -33,27 +33,49 @@
   let currentView = 'dashboard';
   let openItems = new Set();
   let activeRoadmap = 'x-men';
+  let activeRoadmapTab = 'main';
+  let activeRoadmapFamily = 'all';
+  let openRouteSegments = new Set();
   let activePhase = 'all';
   let settings = loadSettings();
   let filters = {
     master: createFilter(), events: createFilter(), stories: createFilter(), ultimate: createFilter(), elseworlds: createFilter(), roadmaps: createFilter()
   };
+  filters.master.phase = settings.masterPhase || 'phase-0';
 
   function createFilter() {
     return { search: '', phase: 'all', category: 'all', priority: 'all', status: 'all', audit: 'all' };
   }
 
+
+  function safeLocalGet(key, fallback = null) {
+    try { return localStorage.getItem(key); }
+    catch { return fallback; }
+  }
+
+  function safeLocalSet(key, value) {
+    try { localStorage.setItem(key, value); return true; }
+    catch { return false; }
+  }
+
+  function safeLocalRemove(key) {
+    try { localStorage.removeItem(key); }
+    catch { /* storage unavailable */ }
+  }
+
   function loadSettings() {
     try {
-      return { routeMode: 'core', theme: 'dark', activeRoadmap: 'x-men', ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') };
+      return { routeMode: DATA.routeConfig?.defaultRouteMode || 'recommended', routeLanes: DATA.routeConfig?.defaultLanes || [], theme: 'dark', activeRoadmap: 'x-men', activeRoadmapTab: 'main', activeRoadmapFamily: 'all', ...JSON.parse(safeLocalGet(SETTINGS_KEY, '{}') || '{}') };
     } catch {
-      return { routeMode: 'core', theme: 'dark', activeRoadmap: 'x-men' };
+      return { routeMode: DATA.routeConfig?.defaultRouteMode || 'recommended', routeLanes: DATA.routeConfig?.defaultLanes || [], theme: 'dark', activeRoadmap: 'x-men', activeRoadmapTab: 'main', activeRoadmapFamily: 'all' };
     }
   }
 
   function saveSettings() {
     settings.activeRoadmap = activeRoadmap;
-    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+    settings.activeRoadmapTab = activeRoadmapTab;
+    settings.activeRoadmapFamily = activeRoadmapFamily;
+    safeLocalSet(SETTINGS_KEY, JSON.stringify(settings));
   }
 
   function escapeHtml(value) {
@@ -106,7 +128,7 @@
     } catch (error) {
       console.warn('IndexedDB unavailable, using LocalStorage fallback.', error);
     }
-    try { progress = JSON.parse(localStorage.getItem(FALLBACK_KEY) || '{}') || {}; }
+    try { progress = JSON.parse(safeLocalGet(FALLBACK_KEY, '{}') || '{}') || {}; }
     catch { progress = {}; }
   }
 
@@ -123,7 +145,7 @@
         tx.onerror = () => reject(tx.error);
       });
     } else {
-      localStorage.setItem(FALLBACK_KEY, JSON.stringify(progress));
+      safeLocalSet(FALLBACK_KEY, JSON.stringify(progress));
     }
   }
 
@@ -137,7 +159,7 @@
         req.onerror = () => reject(req.error);
       });
     }
-    localStorage.removeItem(FALLBACK_KEY);
+    safeLocalRemove(FALLBACK_KEY);
   }
 
   function getIssueRecord(issueId) {
@@ -200,8 +222,7 @@
   }
 
   function phaseProgress(phaseId) {
-    const set = itemsIssueSet(phaseItems(phaseId));
-    const ids = [...set];
+    const ids = DATA.routeConfig?.chapterWindows?.[phaseId] ? routePhaseIssueIds(phaseId) : [...itemsIssueSet(phaseItems(phaseId))];
     const read = ids.filter(isRead).length;
     return { total: ids.length, read, left: Math.max(0, ids.length - read), percent: ids.length ? Math.round(read / ids.length * 100) : 0 };
   }
@@ -214,6 +235,171 @@
     const ids = [...itemsIssueSet(roadmapItems(roadmapId))];
     const read = ids.filter(isRead).length;
     return { total: ids.length, read, left: ids.length - read, percent: ids.length ? Math.round(read / ids.length * 100) : 0 };
+  }
+
+
+  function routeSourceIssueIds(item) {
+    if (Array.isArray(item.routeIssueIds) && item.routeIssueIds.length) {
+      return [...new Set(item.routeIssueIds.filter(id => issuesById[id] && isPublished(id)))];
+    }
+    return uniqueIssueIdsFromSections(getIncludedSections(item), true);
+  }
+
+  function chunkIssues(issueIds, minSize = DATA.routeConfig?.blockMin || 6, maxSize = DATA.routeConfig?.blockMax || 12) {
+    const ids = [...new Set(issueIds)];
+    if (ids.length <= maxSize) return ids.length ? [ids] : [];
+    const chunks = [];
+    for (let index = 0; index < ids.length; index += maxSize) chunks.push(ids.slice(index, index + maxSize));
+    if (chunks.length > 1 && chunks[chunks.length - 1].length < minSize) {
+      const tail = chunks.pop();
+      const previous = chunks[chunks.length - 1];
+      if (previous.length + tail.length <= 15) previous.push(...tail);
+      else {
+        while (tail.length < minSize && previous.length > minSize) tail.unshift(previous.pop());
+        chunks.push(tail);
+      }
+    }
+    return chunks;
+  }
+
+  function segmentPhase(item, segmentNumber) {
+    const rules = DATA.routeConfig?.phaseOverrides?.[item.id] || [];
+    for (const rule of rules) if (segmentNumber <= rule.throughSegment) return rule.phaseId;
+    return item.phaseId;
+  }
+
+  function primaryLane(item) {
+    const preferred = item.roadmapIds?.find(id => !['great-stories', 'ultimate', 'legacy-heroes'].includes(id));
+    return preferred || item.categories?.[0] || 'Marvel Universe';
+  }
+
+  function buildRunSegments(item) {
+    const source = routeSourceIssueIds(item);
+    const chunks = chunkIssues(source);
+    return chunks.map((issueIds, index) => ({
+      id: `route-segment--${item.id}--${index + 1}`,
+      itemId: item.id,
+      item,
+      phaseId: segmentPhase(item, index + 1),
+      order: item.order + ((index + 1) / 1000),
+      segmentNumber: index + 1,
+      segmentCount: chunks.length,
+      issueIds,
+      lane: primaryLane(item),
+      title: chunks.length > 1 ? `${item.title}: Block ${index + 1}` : item.title,
+      summary: item.summary,
+      priority: item.priority,
+      role: item.role,
+      years: item.years
+    }));
+  }
+
+  function routeEntities() {
+    const selectedLanes = new Set(settings.routeLanes?.length ? settings.routeLanes : (DATA.routeConfig?.defaultLanes || []));
+    const items = DATA.items.filter(item => {
+      if (item.page !== 'main' || item.routeEligible === false || !itemVisibleByMode(item)) return false;
+      if (item.kind === 'event') return true;
+      return (item.roadmapIds || []).some(id => selectedLanes.has(id));
+    });
+    const rawSegments = [];
+    const gates = [];
+    items.forEach(item => {
+      if (item.kind === 'event') {
+        gates.push({
+          id: `route-gate--${item.id}`,
+          itemId: item.id,
+          item,
+          phaseId: item.phaseId,
+          order: item.order,
+          issueIds: routeSourceIssueIds(item),
+          lane: 'Event Gate'
+        });
+      } else {
+        rawSegments.push(...buildRunSegments(item));
+      }
+    });
+
+    // Event gates own their crossover chapters. Shared issues are removed from run blocks,
+    // and every remaining issue is assigned to only one segment per phase.
+    const gateIssuesByPhase = {};
+    gates.forEach(gate => {
+      if (!gateIssuesByPhase[gate.phaseId]) gateIssuesByPhase[gate.phaseId] = new Set();
+      gate.issueIds.forEach(id => gateIssuesByPhase[gate.phaseId].add(id));
+    });
+    const seenByPhase = {};
+    const segments = rawSegments.sort((a, b) => a.order - b.order).map(segment => {
+      if (!seenByPhase[segment.phaseId]) seenByPhase[segment.phaseId] = new Set();
+      const gateSet = gateIssuesByPhase[segment.phaseId] || new Set();
+      const issueIds = segment.issueIds.filter(id => !gateSet.has(id) && !seenByPhase[segment.phaseId].has(id));
+      issueIds.forEach(id => seenByPhase[segment.phaseId].add(id));
+      return { ...segment, issueIds };
+    }).filter(segment => segment.issueIds.length);
+    return { segments, gates };
+  }
+
+  function interleaveSegments(segments) {
+    const grouped = new Map();
+    segments.sort((a, b) => a.order - b.order).forEach(segment => {
+      if (!grouped.has(segment.itemId)) grouped.set(segment.itemId, []);
+      grouped.get(segment.itemId).push(segment);
+    });
+    const queues = [...grouped.values()].sort((a, b) => a[0].order - b[0].order);
+    const output = [];
+    let lastLane = '';
+    while (queues.some(queue => queue.length)) {
+      let used = false;
+      for (const queue of queues) {
+        if (!queue.length) continue;
+        const candidate = queue[0];
+        if (candidate.lane === lastLane && queues.some(other => other.length && other[0].lane !== lastLane)) continue;
+        output.push(queue.shift());
+        lastLane = candidate.lane;
+        used = true;
+      }
+      if (!used) {
+        const queue = queues.find(entry => entry.length);
+        if (queue) {
+          const candidate = queue.shift();
+          output.push(candidate);
+          lastLane = candidate.lane;
+        }
+      }
+    }
+    return output;
+  }
+
+  function chapterFlow(phaseId, chapter) {
+    const { segments, gates } = routeEntities();
+    const chapterSegments = segments.filter(segment => segment.phaseId === phaseId && segment.item.order >= chapter.min && segment.item.order < chapter.max);
+    const chapterGates = gates.filter(gate => gate.phaseId === phaseId && gate.item.order >= chapter.min && gate.item.order < chapter.max).sort((a, b) => a.order - b.order);
+    const flow = [];
+    let minimum = chapter.min;
+    chapterGates.forEach(gate => {
+      const before = chapterSegments.filter(segment => segment.item.order >= minimum && segment.item.order <= gate.order);
+      flow.push(...interleaveSegments(before), gate);
+      minimum = gate.order + 0.0001;
+    });
+    const after = chapterSegments.filter(segment => segment.item.order >= minimum);
+    flow.push(...interleaveSegments(after));
+    const seen = new Set();
+    return flow.filter(entity => {
+      if (seen.has(entity.id)) return false;
+      seen.add(entity.id);
+      return true;
+    });
+  }
+
+  function routePhaseIssueIds(phaseId) {
+    const config = DATA.routeConfig?.chapterWindows?.[phaseId] || [];
+    const set = new Set();
+    config.forEach(chapter => chapterFlow(phaseId, chapter).forEach(entity => entity.issueIds.forEach(id => { if (isPublished(id)) set.add(id); })));
+    return [...set];
+  }
+
+  function routeChapterProgress(flow) {
+    const ids = [...new Set(flow.flatMap(entity => entity.issueIds).filter(isPublished))];
+    const read = ids.filter(isRead).length;
+    return { ids, read, total: ids.length, left: ids.length - read, percent: ids.length ? Math.round(read / ids.length * 100) : 0 };
   }
 
   function itemCompletionForPrerequisite(itemId) {
@@ -368,10 +554,76 @@
     }).join('');
   }
 
+  function routeEntityProgress(entity) {
+    const ids = [...new Set(entity.issueIds.filter(isPublished))];
+    const read = ids.filter(isRead).length;
+    return { ids, read, total: ids.length, left: ids.length - read, percent: ids.length ? Math.round(read / ids.length * 100) : 0 };
+  }
+
+  function renderRouteSegment(segment, nextEntity) {
+    const p = routeEntityProgress(segment);
+    const open = openRouteSegments.has(segment.id);
+    const nextLabel = nextEntity ? (nextEntity.item?.title || nextEntity.title || 'Next block') : 'End of chapter';
+    return `<article class="route-segment ${p.total && p.read === p.total ? 'complete' : ''}" id="${segment.id}">
+      <div class="route-step">${segment.segmentNumber}</div>
+      <div class="route-main">
+        <div class="item-card-title">${priorityBadge(segment.priority)}<span class="badge badge-role">${escapeHtml(segment.lane)}</span><span class="badge badge-role">${segment.issueIds.length} issues</span></div>
+        <h4>${escapeHtml(segment.title)}</h4>
+        <p class="item-summary">${escapeHtml(segment.summary)}</p>
+        <p class="route-switch"><strong>Switch after this block:</strong> ${escapeHtml(nextLabel)}</p>
+        ${renderProgressBar(p.percent)}
+        <div class="phase-counts"><span><strong>${p.read}</strong> read</span><span><strong>${p.left}</strong> left</span><span><strong>${p.total}</strong> in block</span></div>
+        <div class="card-actions"><button class="btn primary" data-toggle-segment="${segment.id}">${open ? 'Close issues' : 'Show issues'}</button><button class="btn" data-mark-segment="${segment.id}" data-value="${p.total && p.read === p.total ? 'unread' : 'read'}">${p.total && p.read === p.total ? 'Clear block' : 'Mark block read'}</button><button class="btn ghost" data-open-run="${segment.itemId}">Open full run</button></div>
+        ${open ? `<div class="route-issue-panel"><div class="issue-grid">${segment.issueIds.map(renderIssueRow).join('')}</div></div>` : ''}
+      </div>
+    </article>`;
+  }
+
+  function renderRouteGate(gate, nextEntity) {
+    const item = gate.item;
+    const p = routeEntityProgress(gate);
+    const open = openRouteSegments.has(gate.id);
+    const nextLabel = nextEntity ? (nextEntity.item?.title || nextEntity.title || 'Next block') : 'End of chapter';
+    return `<article class="route-gate ${p.total && p.read === p.total ? 'complete' : ''}" id="${gate.id}">
+      <div class="gate-ribbon">EVENT GATE</div>
+      <div class="item-card-title">${priorityBadge(item.priority)}<span class="badge badge-role">${escapeHtml(item.role)}</span></div>
+      <h4>${escapeHtml(item.title)}</h4>
+      <p class="item-summary">${escapeHtml(item.summary)}</p>
+      ${renderLock(item)}
+      ${renderProgressBar(p.percent)}
+      <div class="phase-counts"><span><strong>${p.read}</strong> read</span><span><strong>${p.left}</strong> left</span><span><strong>${p.total}</strong> unique event issues</span></div>
+      <p class="route-switch"><strong>Resume after the event:</strong> ${escapeHtml(nextLabel)}</p>
+      <div class="card-actions"><button class="btn primary" data-toggle-segment="${gate.id}">${open ? 'Close event issues' : 'Open event issues'}</button><button class="btn" data-mark-segment="${gate.id}" data-value="${p.total && p.read === p.total ? 'unread' : 'read'}">${p.total && p.read === p.total ? 'Clear event' : 'Mark event read'}</button><button class="btn ghost" data-open-run="${item.id}">Open full event</button></div>
+      ${open ? `<div class="route-issue-panel">${item.sections.filter(section => includedRecommendation(section.recommendation)).map(section => `<section class="issue-section"><div class="issue-section-head"><div><div class="item-card-title">${priorityBadge(section.recommendation)}<span class="badge badge-role">${escapeHtml(section.role)}</span></div><h5>${escapeHtml(section.label)}</h5>${section.note ? `<p>${escapeHtml(section.note)}</p>` : ''}</div></div><div class="issue-grid">${section.issueIds.filter(id => gate.issueIds.includes(id)).map(renderIssueRow).join('')}</div></section>`).join('')}</div>` : ''}
+    </article>`;
+  }
+
+  function renderRouteChapter(phase, chapter) {
+    const flow = chapterFlow(phase.id, chapter);
+    if (!flow.length) return '';
+    const p = routeChapterProgress(flow);
+    return `<section class="route-chapter" id="chapter-${chapter.id}">
+      <div class="chapter-heading"><div><span class="badge badge-role">${escapeHtml(phase.short)}</span><h3>${escapeHtml(chapter.title)}</h3><p>${escapeHtml(chapter.subtitle)}</p></div><div class="phase-summary">${p.read}/${p.total} read<br>${p.left} remaining</div></div>
+      <div class="chapter-progress">${renderProgressBar(p.percent)}</div>
+      <div class="route-flow">${flow.map((entity, index) => entity.item?.kind === 'event' ? renderRouteGate(entity, flow[index + 1]) : renderRouteSegment(entity, flow[index + 1])).join('')}</div>
+    </section>`;
+  }
+
+  function renderRouteLanePicker() {
+    const choices = (DATA.routeConfig?.laneChoices || []).map(id => roadmapsById[id]).filter(Boolean);
+    const selected = new Set(settings.routeLanes || []);
+    return `<div class="lane-picker"><div class="lane-picker-head"><div><strong>Active reading lanes</strong><p>Choose which character and team routes are woven into Master Flow. Event gates remain visible.</p></div><button class="btn ghost" data-reset-lanes>Reset core lanes</button></div><div class="lane-chip-grid">${choices.map(roadmap => `<button class="lane-chip ${selected.has(roadmap.id) ? 'active' : ''}" data-route-lane="${roadmap.id}">${escapeHtml(roadmap.title)}</button>`).join('')}</div></div>`;
+  }
+
   function renderMaster() {
-    const base = DATA.items.filter(item => item.page === 'main');
-    const filtered = filterItems(base, 'master');
-    document.getElementById('master').innerHTML = `${renderViewHeader('Guided interleaving', 'Master Flow', 'Runs, events and side stories arranged into flexible phases. This is a recommended flow, not a strict publication prison.')}${renderPhaseTabs(filters.master.phase)}${renderFilters('master', base)}${renderGroupedByPhase(filtered)}`;
+    const selected = filters.master.phase;
+    const phases = selected === 'all' ? DATA.phases : DATA.phases.filter(phase => phase.id === selected);
+    const totalBlocks = phases.reduce((count, phase) => count + (DATA.routeConfig?.chapterWindows?.[phase.id] || []).reduce((sum, chapter) => sum + chapterFlow(phase.id, chapter).length, 0), 0);
+    document.getElementById('master').innerHTML = `${renderViewHeader('Guided interleaving', 'Master Flow', 'Read 6–12 issue blocks, switch lanes, and stop at event gates exactly where they interrupt the surrounding runs. Optional material stays on character pages unless Expanded Route is selected.', `<div class="kpi"><span class="label">Visible reading blocks</span><strong>${totalBlocks}</strong><small>Canonical shared issues are shown only once per phase</small></div>`)}
+      ${renderPhaseTabs(selected)}
+      ${renderRouteLanePicker()}
+      <div class="route-notice"><strong>How this route works:</strong> Finish a short block, switch to another character or team, then return later. Events own their crossover chapters so the same issue is not repeated under every affected run.</div>
+      ${phases.map(phase => `<section class="phase-route"><div class="phase-heading"><div><span class="badge badge-role">${phase.short}</span><h2>${escapeHtml(phase.title)}</h2><p>${escapeHtml(phase.years)} · ${escapeHtml(phase.description)}</p></div><div class="phase-summary">${phaseProgress(phase.id).read}/${phaseProgress(phase.id).total}<br>${phaseProgress(phase.id).left} left</div></div>${(DATA.routeConfig?.chapterWindows?.[phase.id] || []).map(chapter => renderRouteChapter(phase, chapter)).join('')}</section>`).join('')}`;
   }
 
   function renderPhases() {
@@ -383,14 +635,46 @@
       }).join('')}</div>`;
   }
 
+  function roadmapTabItems(roadmapId, tab) {
+    const all = roadmapItems(roadmapId);
+    if (tab === 'optional') return all.filter(item => item.priority === 'Optional' && item.kind !== 'event');
+    if (tab === 'events') return all.filter(item => item.kind === 'event');
+    if (tab === 'stories') return all.filter(item => item.categories.includes('Great Stories') || item.page === 'elseworlds');
+    return all.filter(item => item.kind !== 'event' && ['Peak', 'Essential', 'Recommended', 'Current'].includes(item.priority) && item.page !== 'elseworlds');
+  }
+
+  function renderRoadmapFamilies() {
+    const families = DATA.roadmapFamilies || [];
+    return `<div class="roadmap-families"><button class="phase-tab ${activeRoadmapFamily === 'all' ? 'active' : ''}" data-roadmap-family="all">All roadmaps</button>${families.map(family => `<button class="phase-tab ${activeRoadmapFamily === family.id ? 'active' : ''}" data-roadmap-family="${family.id}">${escapeHtml(family.title)}</button>`).join('')}</div>`;
+  }
+
+  function familyRoadmaps() {
+    if (activeRoadmapFamily === 'all') return DATA.roadmaps.filter(r => r.id !== 'ultimate');
+    const family = (DATA.roadmapFamilies || []).find(entry => entry.id === activeRoadmapFamily);
+    if (!family) return DATA.roadmaps.filter(r => r.id !== 'ultimate');
+    return family.roadmapIds.map(id => roadmapsById[id]).filter(Boolean);
+  }
+
   function renderRoadmaps() {
     const roadmap = roadmapsById[activeRoadmap] || DATA.roadmaps[0];
-    const base = roadmapItems(roadmap.id);
-    const filtered = filterItems(base, 'roadmaps');
-    const p = roadmapProgress(roadmap.id);
-    document.getElementById('roadmaps').innerHTML = `${renderViewHeader('Character and team lanes', roadmap.title, roadmap.description, `<div class="kpi"><span class="label">Roadmap progress</span><strong>${p.percent}%</strong><small>${p.read}/${p.total} issues · ${p.left} left</small></div>`)}
-      <div class="roadmap-grid">${DATA.roadmaps.filter(r => r.id !== 'ultimate').map(r => { const rp = roadmapProgress(r.id); return `<button class="roadmap-card ${r.id === roadmap.id ? 'active' : ''}" data-roadmap="${r.id}"><h4>${escapeHtml(r.title)}</h4><p>${rp.read}/${rp.total} · ${rp.left} left</p></button>`; }).join('')}</div>
-      ${renderFilters('roadmaps', base)}${renderGroupedByPhase(filtered)}`;
+    const base = roadmapTabItems(roadmap.id, activeRoadmapTab);
+    const filtered = filterItems(base, 'roadmaps', { ignoreMode: true });
+    const mainIds = [...new Set(roadmapTabItems(roadmap.id, 'main').flatMap(item => item.sections.filter(section => rank(section.recommendation) <= 3).flatMap(section => section.issueIds)).filter(isPublished))];
+    const read = mainIds.filter(isRead).length;
+    const percent = mainIds.length ? Math.round(read / mainIds.length * 100) : 0;
+    const tabs = [
+      ['main', 'Main Route'],
+      ['optional', 'Worthwhile Optional'],
+      ['events', 'Events & Crossovers'],
+      ['stories', 'Great Stories']
+    ];
+    document.getElementById('roadmaps').innerHTML = `${renderViewHeader('Character and team lanes', roadmap.title, roadmap.description, `<div class="kpi"><span class="label">Main-route progress</span><strong>${percent}%</strong><small>${read}/${mainIds.length} unique issues · ${Math.max(0, mainIds.length - read)} left</small></div>`)}
+      ${renderRoadmapFamilies()}
+      <div class="roadmap-grid">${familyRoadmaps().map(r => { const rp = roadmapProgress(r.id); return `<button class="roadmap-card ${r.id === roadmap.id ? 'active' : ''}" data-roadmap="${r.id}"><h4>${escapeHtml(r.title)}</h4><p>${rp.read}/${rp.total} · ${rp.left} left</p></button>`; }).join('')}</div>
+      <div class="roadmap-tabs">${tabs.map(([id, label]) => `<button class="phase-tab ${activeRoadmapTab === id ? 'active' : ''}" data-roadmap-tab="${id}">${label}</button>`).join('')}</div>
+      <div class="route-notice">${activeRoadmapTab === 'main' ? 'Only Peak, Essential, Recommended and current material appears here.' : activeRoadmapTab === 'optional' ? 'Strong supporting material that stays out of the central Master Flow.' : activeRoadmapTab === 'events' ? 'Shared crossover issues update this roadmap, Events and every other connected character page together.' : 'Standalones and alternate-world stories that are excellent without being required continuity.'}</div>
+      ${renderFilters('roadmaps', base, { noPhase: activeRoadmapTab === 'stories' })}
+      ${activeRoadmapTab === 'stories' ? renderStandaloneGroup('Great Stories', 'Strong standalones and alternate worlds linked to this character.', filtered) : renderGroupedByPhase(filtered, { showLocks: activeRoadmapTab === 'events' })}`;
   }
 
   function renderEvents() {
@@ -588,6 +872,26 @@
     window.setTimeout(() => document.getElementById(`item-${itemId}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 80);
   }
 
+
+  function findRouteEntity(entityId) {
+    const { segments, gates } = routeEntities();
+    return [...segments, ...gates].find(entity => entity.id === entityId);
+  }
+
+  function openRunInRoadmap(itemId) {
+    const item = itemsById[itemId];
+    if (!item) return;
+    if (item.page === 'ultimate') { setView('ultimate'); return; }
+    if (item.page === 'elseworlds') { setView('elseworlds'); return; }
+    const roadmapId = item.roadmapIds?.find(id => roadmapsById[id]) || activeRoadmap;
+    activeRoadmap = roadmapId;
+    activeRoadmapTab = item.kind === 'event' ? 'events' : item.priority === 'Optional' ? 'optional' : 'main';
+    openItems.add(itemId);
+    saveSettings();
+    setView('roadmaps');
+    window.setTimeout(() => document.getElementById(`item-${itemId}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+  }
+
   function exportBackup() {
     const payload = {
       schemaVersion: DATA.schemaVersion,
@@ -627,7 +931,7 @@
   async function migrateLegacy() {
     let legacy = null;
     for (const key of OLD_PROGRESS_KEYS) {
-      try { legacy = JSON.parse(localStorage.getItem(key) || 'null'); }
+      try { legacy = JSON.parse(safeLocalGet(key, 'null') || 'null'); }
       catch { legacy = null; }
       if (legacy) break;
     }
@@ -658,6 +962,32 @@
     if (nav) { setView(nav.dataset.view); return; }
     const targetView = event.target.closest('[data-view-target]');
     if (targetView) { setView(targetView.dataset.viewTarget); return; }
+    const toggleSegment = event.target.closest('[data-toggle-segment]');
+    if (toggleSegment) { const id = toggleSegment.dataset.toggleSegment; openRouteSegments.has(id) ? openRouteSegments.delete(id) : openRouteSegments.add(id); rerenderPreservingScroll(); return; }
+    const markSegment = event.target.closest('[data-mark-segment]');
+    if (markSegment) { const entity = findRouteEntity(markSegment.dataset.markSegment); if (entity) await markIssues(entity.issueIds, markSegment.dataset.value === 'read'); rerenderPreservingScroll(); return; }
+    const openRun = event.target.closest('[data-open-run]');
+    if (openRun) { openRunInRoadmap(openRun.dataset.openRun); return; }
+    const routeLane = event.target.closest('[data-route-lane]');
+    if (routeLane) {
+      const id = routeLane.dataset.routeLane;
+      const lanes = new Set(settings.routeLanes || []);
+      lanes.has(id) ? lanes.delete(id) : lanes.add(id);
+      settings.routeLanes = [...lanes];
+      saveSettings();
+      renderMaster();
+      return;
+    }
+    if (event.target.closest('[data-reset-lanes]')) {
+      settings.routeLanes = [...(DATA.routeConfig?.defaultLanes || [])];
+      saveSettings();
+      renderMaster();
+      return;
+    }
+    const roadmapTab = event.target.closest('[data-roadmap-tab]');
+    if (roadmapTab) { activeRoadmapTab = roadmapTab.dataset.roadmapTab; saveSettings(); renderRoadmaps(); return; }
+    const roadmapFamily = event.target.closest('[data-roadmap-family]');
+    if (roadmapFamily) { activeRoadmapFamily = roadmapFamily.dataset.roadmapFamily; saveSettings(); renderRoadmaps(); return; }
     const toggle = event.target.closest('[data-toggle-item]');
     if (toggle) { const id = toggle.dataset.toggleItem; openItems.has(id) ? openItems.delete(id) : openItems.add(id); rerenderPreservingScroll(); return; }
     const issueCheck = event.target.closest('[data-issue-check]');
@@ -673,11 +1003,11 @@
     const dialogJump = event.target.closest('[data-dialog-jump]');
     if (dialogJump) { document.getElementById('issueDialog').close(); jumpToItem(dialogJump.dataset.dialogJump); return; }
     const phaseButton = event.target.closest('[data-open-phase]');
-    if (phaseButton) { filters.master.phase = phaseButton.dataset.openPhase; setView('master'); return; }
+    if (phaseButton) { filters.master.phase = phaseButton.dataset.openPhase; settings.masterPhase = filters.master.phase; saveSettings(); setView('master'); return; }
     const phaseFilter = event.target.closest('[data-phase-filter]');
-    if (phaseFilter) { const key = currentView === 'events' ? 'events' : 'master'; filters[key].phase = phaseFilter.dataset.phaseFilter; renderCurrentView(); return; }
+    if (phaseFilter) { const key = currentView === 'events' ? 'events' : 'master'; filters[key].phase = phaseFilter.dataset.phaseFilter; if (key === 'master') { settings.masterPhase = filters[key].phase; saveSettings(); } renderCurrentView(); return; }
     const roadButton = event.target.closest('[data-roadmap], [data-open-roadmap]');
-    if (roadButton) { const roadmapId = roadButton.dataset.roadmap || roadButton.dataset.openRoadmap; if (roadmapId === 'ultimate') { setView('ultimate'); return; } activeRoadmap = roadmapId; saveSettings(); setView('roadmaps'); return; }
+    if (roadButton) { const roadmapId = roadButton.dataset.roadmap || roadButton.dataset.openRoadmap; if (roadmapId === 'ultimate') { setView('ultimate'); return; } activeRoadmap = roadmapId; activeRoadmapTab = 'main'; saveSettings(); setView('roadmaps'); return; }
     const jump = event.target.closest('[data-jump-item]');
     if (jump) { jumpToItem(jump.dataset.jumpItem); return; }
     const theme = event.target.closest('[data-set-theme]');
@@ -733,6 +1063,8 @@
   async function init() {
     await loadProgress();
     activeRoadmap = settings.activeRoadmap || 'x-men';
+    activeRoadmapTab = settings.activeRoadmapTab || 'main';
+    activeRoadmapFamily = settings.activeRoadmapFamily || 'all';
     document.getElementById('routeMode').value = settings.routeMode;
     applyTheme(settings.theme);
     renderCurrentView();

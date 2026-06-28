@@ -321,3 +321,138 @@ a { color: inherit; }
   .phase-heading { display: block; }
   .phase-heading .phase-summary { text-align: left; margin-top: 8px; }
 }
+
+/* v4 interleaved route */
+.route-notice {
+  margin: 12px 0 20px;
+  padding: 13px 15px;
+  border: 1px solid color-mix(in srgb, var(--blue) 35%, var(--line));
+  border-radius: 13px;
+  background: color-mix(in srgb, var(--blue) 8%, var(--panel));
+  color: var(--muted);
+  line-height: 1.55;
+  font-size: .84rem;
+}
+.phase-route { margin: 28px 0 48px; scroll-margin-top: 140px; }
+.phase-route > .phase-heading h2 { margin: 0; font-size: 1.55rem; }
+.route-chapter {
+  position: relative;
+  margin: 20px 0 30px;
+  padding: 17px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--panel) 88%, transparent);
+}
+.chapter-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+.chapter-heading h3 { margin: 3px 0 5px; font-size: 1.18rem; }
+.chapter-heading p { margin: 0; color: var(--muted); font-size: .82rem; line-height: 1.45; }
+.chapter-progress .progress-bar { width: 100%; margin-bottom: 18px; }
+.route-flow { display: grid; gap: 12px; }
+.route-segment {
+  position: relative;
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 13px;
+  padding: 15px;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: var(--panel);
+}
+.route-segment.complete { border-color: color-mix(in srgb, var(--green) 55%, var(--line)); }
+.route-step {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--panel-3);
+  color: var(--muted);
+  font-weight: 850;
+  font-size: .76rem;
+}
+.route-main h4, .route-gate h4 { margin: 5px 0 4px; font-size: 1.02rem; }
+.route-switch {
+  margin: 9px 0;
+  color: var(--muted);
+  font-size: .78rem;
+}
+.route-issue-panel {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+.route-issue-panel > .issue-grid { max-height: 420px; padding: 0; }
+.route-gate {
+  position: relative;
+  overflow: hidden;
+  padding: 18px;
+  border: 1px solid color-mix(in srgb, var(--accent) 48%, var(--line));
+  border-radius: 17px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--accent) 13%, transparent), transparent 48%),
+    var(--panel);
+}
+.route-gate.complete { border-color: color-mix(in srgb, var(--green) 55%, var(--line)); }
+.gate-ribbon {
+  position: absolute;
+  right: -35px;
+  top: 16px;
+  transform: rotate(35deg);
+  min-width: 150px;
+  padding: 5px 10px;
+  text-align: center;
+  background: var(--accent);
+  color: #fff;
+  font-size: .62rem;
+  font-weight: 900;
+  letter-spacing: .12em;
+}
+.roadmap-families, .roadmap-tabs {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin: 0 0 14px;
+}
+.roadmap-tabs { margin-top: 4px; }
+
+@media (max-width: 700px) {
+  .route-segment { grid-template-columns: 1fr; }
+  .route-step { width: 30px; height: 30px; }
+  .chapter-heading { display: block; }
+  .chapter-heading .phase-summary { margin-top: 8px; text-align: left; }
+  .gate-ribbon { display: none; }
+}
+
+.lane-picker {
+  margin: 0 0 16px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--panel);
+}
+.lane-picker-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 10px;
+}
+.lane-picker-head p { margin: 4px 0 0; color: var(--muted); font-size: .78rem; }
+.lane-chip-grid { display: flex; flex-wrap: wrap; gap: 7px; }
+.lane-chip {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel-2);
+  color: var(--muted);
+  padding: 7px 10px;
+  cursor: pointer;
+  font-size: .73rem;
+  font-weight: 750;
+}
+.lane-chip.active { background: var(--accent-soft); border-color: var(--accent); color: var(--text); }
