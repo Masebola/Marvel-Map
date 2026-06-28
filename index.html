@@ -3,99 +3,94 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Miclase Marvel Universe</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="color-scheme" content="dark light" />
+  <title>Marvel Reading Vault v3</title>
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <header class="hero">
-    <nav class="topbar">
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
       <div class="brand">
-        <span class="brand-mark">M</span>
+        <div class="brand-mark">M</div>
         <div>
-          <h1>Miclase Marvel Universe</h1>
-          <p>Interchangeable Marvel reading roadmap tracker</p>
+          <h1>Marvel Reading Vault</h1>
+          <p>Canonical Roadmap Archive</p>
         </div>
       </div>
-      <button id="themeToggle" class="ghost-btn" type="button" aria-label="Toggle theme">☾</button>
-    </nav>
 
-    <section class="dashboard" aria-label="Reading progress dashboard">
-      <div class="stat-card primary-stat">
-        <span class="stat-label">Total progress</span>
-        <strong id="globalProgressText">0 / 0</strong>
-        <div class="progress-shell"><div id="globalProgressBar" class="progress-fill"></div></div>
-      </div>
-      <div class="stat-card">
-        <span class="stat-label">Current phase</span>
-        <strong id="phaseProgressText">0 / 0</strong>
-        <div class="progress-shell"><div id="phaseProgressBar" class="progress-fill alt"></div></div>
-      </div>
-      <div class="stat-card">
-        <span class="stat-label">Blocks completed</span>
-        <strong id="blockProgressText">0 / 0</strong>
-      </div>
-      <div class="stat-card">
-        <span class="stat-label">Current focus</span>
-        <strong id="currentPhaseLabel">Phase 1</strong>
-      </div>
-    </section>
-  </header>
+      <nav class="nav" aria-label="Main navigation">
+        <button class="nav-link active" data-view="dashboard"><span>⌂</span>Dashboard</button>
+        <button class="nav-link" data-view="master"><span>⇄</span>Master Flow</button>
+        <button class="nav-link" data-view="phases"><span>◫</span>Phases</button>
+        <button class="nav-link" data-view="roadmaps"><span>☷</span>Roadmaps</button>
+        <button class="nav-link" data-view="events"><span>◆</span>Events</button>
+        <button class="nav-link" data-view="stories"><span>★</span>Great Stories</button>
+        <button class="nav-link" data-view="ultimate"><span>U</span>Ultimate Universe</button>
+        <button class="nav-link" data-view="elseworlds"><span>∞</span>Elseworlds & Crossovers</button>
+        <button class="nav-link" data-view="stats"><span>▥</span>Stats</button>
+        <button class="nav-link" data-view="settings"><span>⚙</span>Settings</button>
+      </nav>
 
-  <main class="layout">
-    <aside class="sidebar" aria-label="Phase navigation">
-      <div class="panel-title">Reading Phases</div>
-      <div id="phaseTabs" class="phase-tabs"></div>
-      <div class="toolbox">
-        <button id="markPhaseBtn" class="tool-btn" type="button">Mark phase read</button>
-        <button id="clearPhaseBtn" class="tool-btn danger" type="button">Clear phase</button>
-        <button id="expandAllBtn" class="tool-btn" type="button">Expand visible</button>
-        <button id="collapseAllBtn" class="tool-btn" type="button">Collapse visible</button>
+      <div class="sidebar-foot">
+        <div class="save-state"><span class="status-dot"></span><span>Shared issue progress</span></div>
+        <small id="dataVersion"></small>
       </div>
     </aside>
 
-    <section class="content">
-      <div class="controls">
-        <div class="search-wrap">
-          <label for="searchInput">Search roadmap</label>
-          <input id="searchInput" type="search" placeholder="Search Spider-Man, Secret Wars, UXM #129..." autocomplete="off" />
+    <main class="main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="menu-btn" id="menuBtn" aria-label="Toggle navigation">☰</button>
+          <div>
+            <p class="eyebrow">Personal Marvel reading system</p>
+            <h2 id="pageTitle">Dashboard</h2>
+          </div>
         </div>
-        <div class="filter-wrap">
-          <label for="familyFilter">Character / team</label>
-          <select id="familyFilter">
-            <option value="all">All families</option>
-          </select>
+
+        <div class="topbar-actions">
+          <label class="global-search">
+            <span>⌕</span>
+            <input id="globalSearch" type="search" placeholder="Search any run, issue, writer or event…" autocomplete="off" />
+          </label>
+          <label class="compact-control">
+            <span>Route</span>
+            <select id="routeMode">
+              <option value="peak">Peak only</option>
+              <option value="core">Peak + Essential</option>
+              <option value="recommended">Recommended route</option>
+              <option value="curated">Full curated route</option>
+              <option value="completionist">Completionist</option>
+            </select>
+          </label>
+          <button class="icon-control" id="themeToggle" type="button" aria-label="Toggle theme">☀</button>
         </div>
-        <label class="essential-switch" for="essentialToggle">
-          <input id="essentialToggle" type="checkbox" />
-          <span>Essentials only</span>
-        </label>
-      </div>
+      </header>
 
-      <section class="phase-intro">
-        <div>
-          <p id="phaseKicker" class="kicker">Phase 1</p>
-          <h2 id="phaseTitle">Marvel foundation era</h2>
-          <p id="phaseDesc">The birth of the Marvel universe.</p>
-        </div>
-        <div class="phase-mini-stat">
-          <span id="visibleCount">0 blocks visible</span>
-        </div>
-      </section>
+      <div class="search-results" id="searchResults" hidden></div>
 
-      <div id="blocksContainer" class="blocks"></div>
-    </section>
-  </main>
+      <section class="view active" id="dashboard"></section>
+      <section class="view" id="master"></section>
+      <section class="view" id="phases"></section>
+      <section class="view" id="roadmaps"></section>
+      <section class="view" id="events"></section>
+      <section class="view" id="stories"></section>
+      <section class="view" id="ultimate"></section>
+      <section class="view" id="elseworlds"></section>
+      <section class="view" id="stats"></section>
+      <section class="view" id="settings"></section>
+    </main>
+  </div>
 
-  <footer class="footer">
-    <p>Progress saves automatically in your browser using localStorage.</p>
-    <div class="footer-actions">
-      <button id="exportBtn" class="ghost-btn" type="button">Export progress</button>
-      <label class="import-label" for="importInput">Import progress</label>
-      <input id="importInput" type="file" accept="application/json" hidden />
-      <button id="resetBtn" class="ghost-btn danger-text" type="button">Reset all</button>
-    </div>
-  </footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="script.js"></script>
+  <dialog class="issue-dialog" id="issueDialog">
+    <form method="dialog" class="dialog-shell">
+      <button class="dialog-close" value="close" aria-label="Close">×</button>
+      <div id="issueDialogBody"></div>
+    </form>
+  </dialog>
+
+  <script src="js/catalog.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>
