@@ -1,4 +1,4 @@
-# Marvel Reading Vault v4
+# Marvel Reading Vault v4.1
 
 A static HTML/CSS/JavaScript Marvel reading tracker designed around short interleaved reading blocks rather than giant uninterrupted title dumps.
 
@@ -63,3 +63,12 @@ Use Settings > Export backup regularly to create a portable JSON copy.
 - `js/expansions.js`: v4 roadmap additions and phase/chapter configuration
 - `js/app.js`: rendering, route generation, progress storage, search, filters and interactions
 - `AUDIT.md`: build audit summary
+
+
+## v4.1 usability update
+
+- Added **Select all** and **Clear all** controls to Active Reading Lanes.
+- An intentionally empty lane selection now remains empty instead of silently restoring the default core lanes.
+- Phase buttons and headings display their year ranges in brackets.
+- Master Flow blocks and event gates display the writer, run/event years, and phase period.
+- Character and run cards label writer and run-year metadata explicitly.

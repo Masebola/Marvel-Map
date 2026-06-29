@@ -1,23 +1,66 @@
-# Catalogue audit
+# Marvel Reading Vault v4 Audit
 
-The v3 catalogue uses canonical issue IDs and programmatic reference validation.
+Build date: 2026-06-28
 
-## Release checks
+## Catalogue integrity
 
-- Unique item IDs
-- Unique canonical issue IDs
-- No missing issue references
-- Resolved event prerequisites
-- Phase totals deduplicated by issue ID
-- Ultimate and alternate universes separated from Earth-616 phase totals
-- Published and solicited issues separated
-- Every event section supports its own recommendation label
-- Shared issues retain one progress record across all displays
+- Phases: 10
+- Series records: 626
+- Canonical issue records: 9,129
+- Run/event/story records: 399
+- Structured events: 56
+- Character/team roadmaps: 67
+- Duplicate item IDs: 0
+- Missing canonical issue references: 0
 
-## Catalogue size at release
+## Route integrity
 
-The exact live counts are shown inside Settings because the catalogue can be extended without changing the application architecture.
+- Run blocks are generated at a target size of 6–12 issues.
+- A short miniseries or final remainder can remain below six issues rather than being split unnaturally.
+- No generated run block exceeds 15 issues.
+- Event gates own their crossover issue IDs within a phase.
+- Shared event issues are removed from surrounding run blocks to prevent repeated reading entries.
+- Phase and chapter totals use unique published issue IDs.
+- Solicited/upcoming issues do not count toward completion.
 
-## Important reading-order correction
+## Default Master Flow
 
-The Korvac Saga is structured with the Guardians background as optional, `Thor Annual #6` as the required prelude, `Avengers #167-168` and `#170-177` as the required Avengers core, and `Avengers #169` as a publication-flow issue rather than a core Korvac chapter.
+The default selected lanes are:
+
+- X-Men
+- Spider-Man
+- Daredevil
+- Fantastic Four
+- Avengers
+- Thor
+- Hulk
+- Iron Man
+- Captain America
+- Thunderbolts
+
+Additional lanes can be toggled from the Master Flow without changing canonical progress.
+
+## Browser testing
+
+The site was rendered in headless Chromium with:
+
+- Dashboard rendering
+- Master Flow phase navigation
+- Interleaved run blocks
+- Event gates
+- Lane toggles
+- Roadmap family filters
+- Character roadmap tabs
+- Worthwhile Optional tabs
+- Dark-theme layout
+
+No runtime JavaScript errors were observed during the final rendering test.
+
+## v4.1 interface audit
+
+- Active Reading Lanes includes Select all and Clear all.
+- Empty lane selections persist and no longer fall back to core lanes.
+- Phase controls and headings expose the phase year range.
+- Master Flow segments expose writer, run years and phase period.
+- Run/event cards explicitly label writer and date metadata.
+- JavaScript syntax checks passed for app.js, catalog.js and expansions.js.

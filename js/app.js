@@ -295,7 +295,7 @@
   }
 
   function routeEntities() {
-    const selectedLanes = new Set(settings.routeLanes?.length ? settings.routeLanes : (DATA.routeConfig?.defaultLanes || []));
+    const selectedLanes = new Set(Array.isArray(settings.routeLanes) ? settings.routeLanes : (DATA.routeConfig?.defaultLanes || []));
     const items = DATA.items.filter(item => {
       if (item.page !== 'main' || item.routeEligible === false || !itemVisibleByMode(item)) return false;
       if (item.kind === 'event') return true;
@@ -513,7 +513,7 @@
     const phaseOptions = options.noPhase ? [] : DATA.phases;
     return `<div class="filters">
       <div class="filter-control grow"><label>Search this page</label><input type="search" data-filter-key="${key}" data-filter-name="search" value="${escapeAttr(f.search)}" placeholder="Title, writer, issue, category…"></div>
-      ${options.noPhase ? '' : `<div class="filter-control"><label>Phase</label><select data-filter-key="${key}" data-filter-name="phase"><option value="all">All phases</option>${phaseOptions.map(p => `<option value="${p.id}" ${f.phase === p.id ? 'selected' : ''}>${escapeHtml(p.short)} · ${escapeHtml(p.title)}</option>`).join('')}</select></div>`}
+      ${options.noPhase ? '' : `<div class="filter-control"><label>Phase</label><select data-filter-key="${key}" data-filter-name="phase"><option value="all">All phases</option>${phaseOptions.map(p => `<option value="${p.id}" ${f.phase === p.id ? 'selected' : ''}>${escapeHtml(p.short)} · ${escapeHtml(p.title)} (${escapeHtml(p.years)})</option>`).join('')}</select></div>`}
       <div class="filter-control"><label>Category</label><select data-filter-key="${key}" data-filter-name="category"><option value="all">All categories</option>${categories.map(cat => `<option value="${escapeAttr(cat)}" ${f.category === cat ? 'selected' : ''}>${escapeHtml(cat)}</option>`).join('')}</select></div>
       <div class="filter-control"><label>Priority</label><select data-filter-key="${key}" data-filter-name="priority"><option value="all">All labels</option>${['Peak','Essential','Current','Recommended','Optional','Skim','Skip'].map(value => `<option value="${value}" ${f.priority === value ? 'selected' : ''}>${value}</option>`).join('')}</select></div>
       <div class="filter-control"><label>Status</label><select data-filter-key="${key}" data-filter-name="status"><option value="all">All status</option>${['unread','reading','complete','upcoming'].map(value => `<option value="${value}" ${f.status === value ? 'selected' : ''}>${value}</option>`).join('')}</select></div>
@@ -541,7 +541,7 @@
   }
 
   function renderPhaseTabs(selected = 'all') {
-    return `<div class="phase-tabs"><button class="phase-tab ${selected === 'all' ? 'active' : ''}" data-phase-filter="all">All phases</button>${DATA.phases.map(p => `<button class="phase-tab ${selected === p.id ? 'active' : ''}" data-phase-filter="${p.id}">${escapeHtml(p.short)} · ${escapeHtml(p.title)}</button>`).join('')}</div>`;
+    return `<div class="phase-tabs"><button class="phase-tab ${selected === 'all' ? 'active' : ''}" data-phase-filter="all">All phases</button>${DATA.phases.map(p => `<button class="phase-tab ${selected === p.id ? 'active' : ''}" data-phase-filter="${p.id}">${escapeHtml(p.short)} · ${escapeHtml(p.title)} (${escapeHtml(p.years)})</button>`).join('')}</div>`;
   }
 
   function renderGroupedByPhase(items, options = {}) {
@@ -550,7 +550,7 @@
       const phaseList = items.filter(item => item.phaseId === phase.id);
       if (!phaseList.length) return '';
       const p = phaseProgress(phase.id);
-      return `<section class="phase-section" id="section-${phase.id}"><div class="phase-heading"><div><span class="badge badge-role">${phase.short}</span><h3>${escapeHtml(phase.title)}</h3><p>${escapeHtml(phase.years)} · ${escapeHtml(phase.description)}</p></div><div class="phase-summary">${p.read}/${p.total} route issues<br>${p.left} remaining</div></div><div class="item-list">${phaseList.map(item => renderItemCard(item, options)).join('')}</div></section>`;
+      return `<section class="phase-section" id="section-${phase.id}"><div class="phase-heading"><div><span class="badge badge-role">${phase.short}</span><h3>${escapeHtml(phase.title)} <span class="phase-years-inline">(${escapeHtml(phase.years)})</span></h3><p>${escapeHtml(phase.description)}</p></div><div class="phase-summary">${p.read}/${p.total} route issues<br>${p.left} remaining</div></div><div class="item-list">${phaseList.map(item => renderItemCard(item, options)).join('')}</div></section>`;
     }).join('');
   }
 
@@ -569,6 +569,7 @@
       <div class="route-main">
         <div class="item-card-title">${priorityBadge(segment.priority)}<span class="badge badge-role">${escapeHtml(segment.lane)}</span><span class="badge badge-role">${segment.issueIds.length} issues</span></div>
         <h4>${escapeHtml(segment.title)}</h4>
+        <div class="route-meta"><span><strong>Writer:</strong> ${escapeHtml(segment.item.writer)}</span>${segment.years ? `<span><strong>Run years:</strong> ${escapeHtml(segment.years)}</span>` : ''}<span><strong>Phase:</strong> ${escapeHtml(phasesById[segment.phaseId]?.title || segment.phaseId)} (${escapeHtml(phasesById[segment.phaseId]?.years || '')})</span></div>
         <p class="item-summary">${escapeHtml(segment.summary)}</p>
         <p class="route-switch"><strong>Switch after this block:</strong> ${escapeHtml(nextLabel)}</p>
         ${renderProgressBar(p.percent)}
@@ -588,6 +589,7 @@
       <div class="gate-ribbon">EVENT GATE</div>
       <div class="item-card-title">${priorityBadge(item.priority)}<span class="badge badge-role">${escapeHtml(item.role)}</span></div>
       <h4>${escapeHtml(item.title)}</h4>
+      <div class="route-meta"><span><strong>Writer:</strong> ${escapeHtml(item.writer)}</span>${item.years ? `<span><strong>Event years:</strong> ${escapeHtml(item.years)}</span>` : ''}<span><strong>Phase:</strong> ${escapeHtml(phasesById[item.phaseId]?.title || item.phaseId)} (${escapeHtml(phasesById[item.phaseId]?.years || '')})</span></div>
       <p class="item-summary">${escapeHtml(item.summary)}</p>
       ${renderLock(item)}
       ${renderProgressBar(p.percent)}
@@ -603,7 +605,7 @@
     if (!flow.length) return '';
     const p = routeChapterProgress(flow);
     return `<section class="route-chapter" id="chapter-${chapter.id}">
-      <div class="chapter-heading"><div><span class="badge badge-role">${escapeHtml(phase.short)}</span><h3>${escapeHtml(chapter.title)}</h3><p>${escapeHtml(chapter.subtitle)}</p></div><div class="phase-summary">${p.read}/${p.total} read<br>${p.left} remaining</div></div>
+      <div class="chapter-heading"><div><span class="badge badge-role">${escapeHtml(phase.short)} · ${escapeHtml(phase.years)}</span><h3>${escapeHtml(chapter.title)}</h3><p>${escapeHtml(chapter.subtitle)}</p></div><div class="phase-summary">${p.read}/${p.total} read<br>${p.left} remaining</div></div>
       <div class="chapter-progress">${renderProgressBar(p.percent)}</div>
       <div class="route-flow">${flow.map((entity, index) => entity.item?.kind === 'event' ? renderRouteGate(entity, flow[index + 1]) : renderRouteSegment(entity, flow[index + 1])).join('')}</div>
     </section>`;
@@ -612,7 +614,7 @@
   function renderRouteLanePicker() {
     const choices = (DATA.routeConfig?.laneChoices || []).map(id => roadmapsById[id]).filter(Boolean);
     const selected = new Set(settings.routeLanes || []);
-    return `<div class="lane-picker"><div class="lane-picker-head"><div><strong>Active reading lanes</strong><p>Choose which character and team routes are woven into Master Flow. Event gates remain visible.</p></div><button class="btn ghost" data-reset-lanes>Reset core lanes</button></div><div class="lane-chip-grid">${choices.map(roadmap => `<button class="lane-chip ${selected.has(roadmap.id) ? 'active' : ''}" data-route-lane="${roadmap.id}">${escapeHtml(roadmap.title)}</button>`).join('')}</div></div>`;
+    return `<div class="lane-picker"><div class="lane-picker-head"><div><strong>Active reading lanes</strong><p>${selected.size} of ${choices.length} lanes selected. Core lanes are selected on first use; after that, your choices are remembered. Event gates remain visible even when every lane is cleared.</p></div><div class="lane-picker-actions"><button class="btn primary" data-select-all-lanes>Select all</button><button class="btn ghost" data-clear-all-lanes>Clear all</button></div></div><div class="lane-chip-grid">${choices.map(roadmap => `<button class="lane-chip ${selected.has(roadmap.id) ? 'active' : ''}" data-route-lane="${roadmap.id}" aria-pressed="${selected.has(roadmap.id)}">${escapeHtml(roadmap.title)}</button>`).join('')}</div></div>`;
   }
 
   function renderMaster() {
@@ -623,7 +625,7 @@
       ${renderPhaseTabs(selected)}
       ${renderRouteLanePicker()}
       <div class="route-notice"><strong>How this route works:</strong> Finish a short block, switch to another character or team, then return later. Events own their crossover chapters so the same issue is not repeated under every affected run.</div>
-      ${phases.map(phase => `<section class="phase-route"><div class="phase-heading"><div><span class="badge badge-role">${phase.short}</span><h2>${escapeHtml(phase.title)}</h2><p>${escapeHtml(phase.years)} · ${escapeHtml(phase.description)}</p></div><div class="phase-summary">${phaseProgress(phase.id).read}/${phaseProgress(phase.id).total}<br>${phaseProgress(phase.id).left} left</div></div>${(DATA.routeConfig?.chapterWindows?.[phase.id] || []).map(chapter => renderRouteChapter(phase, chapter)).join('')}</section>`).join('')}`;
+      ${phases.map(phase => `<section class="phase-route"><div class="phase-heading"><div><span class="badge badge-role">${phase.short}</span><h2>${escapeHtml(phase.title)} <span class="phase-years-inline">(${escapeHtml(phase.years)})</span></h2><p>${escapeHtml(phase.description)}</p></div><div class="phase-summary">${phaseProgress(phase.id).read}/${phaseProgress(phase.id).total}<br>${phaseProgress(phase.id).left} left</div></div>${(DATA.routeConfig?.chapterWindows?.[phase.id] || []).map(chapter => renderRouteChapter(phase, chapter)).join('')}</section>`).join('')}`;
   }
 
   function renderPhases() {
@@ -631,7 +633,7 @@
       <div class="phase-grid">${DATA.phases.map(phase => {
         const p = phaseProgress(phase.id);
         const top = phaseItems(phase.id).filter(itemVisibleByMode).sort(sortItems).slice(0, 5);
-        return `<article class="phase-card"><div class="phase-card-top"><div><span class="badge badge-role">${phase.short}</span><h4>${escapeHtml(phase.title)}</h4><p>${escapeHtml(phase.years)} · ${escapeHtml(phase.description)}</p></div><strong>${p.percent}%</strong></div>${renderProgressBar(p.percent)}<div class="phase-counts"><span><strong>${p.read}</strong> read</span><span><strong>${p.left}</strong> left</span><span><strong>${p.total}</strong> unique</span></div><div class="hero-actions"><button class="btn primary" data-open-phase="${phase.id}">Open in Master Flow</button></div><div class="item-meta">${top.map(item => item.title).join(' · ')}</div></article>`;
+        return `<article class="phase-card"><div class="phase-card-top"><div><span class="badge badge-role">${phase.short}</span><h4>${escapeHtml(phase.title)} <span class="phase-years-inline">(${escapeHtml(phase.years)})</span></h4><p>${escapeHtml(phase.description)}</p></div><strong>${p.percent}%</strong></div>${renderProgressBar(p.percent)}<div class="phase-counts"><span><strong>${p.read}</strong> read</span><span><strong>${p.left}</strong> left</span><span><strong>${p.total}</strong> unique</span></div><div class="hero-actions"><button class="btn primary" data-open-phase="${phase.id}">Open in Master Flow</button></div><div class="item-meta">${top.map(item => item.title).join(' · ')}</div></article>`;
       }).join('')}</div>`;
   }
 
@@ -762,7 +764,7 @@
     const phase = phasesById[item.phaseId];
     const sharedCount = new Set(item.sections.flatMap(section => section.issueIds.filter(id => (issueToItems[id] || []).length > 1))).size;
     return `<article class="item-card ${p.status === 'complete' ? 'complete' : ''}" id="item-${item.id}">
-      <div class="item-card-header"><div><div class="item-card-title">${priorityBadge(item.priority)}<span class="badge badge-role">${escapeHtml(item.role)}</span>${auditBadge(item.auditStatus)}${phase ? `<span class="badge badge-role">${escapeHtml(phase.short)}</span>` : ''}</div><h4>${escapeHtml(item.title)}</h4><div class="item-meta"><span>${escapeHtml(item.writer)}</span>${item.years ? `<span>· ${escapeHtml(item.years)}</span>` : ''}<span>· ${item.sections.length} sections</span>${sharedCount ? `<span>· ${sharedCount} shared crossover issues</span>` : ''}</div><p class="item-summary">${escapeHtml(item.summary)}</p>${item.note ? `<p class="item-note"><strong>Reading note:</strong> ${escapeHtml(item.note)}</p>` : ''}${options.showLocks || item.kind === 'event' ? renderLock(item) : ''}</div>
+      <div class="item-card-header"><div><div class="item-card-title">${priorityBadge(item.priority)}<span class="badge badge-role">${escapeHtml(item.role)}</span>${auditBadge(item.auditStatus)}${phase ? `<span class="badge badge-role">${escapeHtml(phase.short)} · ${escapeHtml(phase.years)}</span>` : ''}</div><h4>${escapeHtml(item.title)}</h4><div class="item-meta"><span><strong>Writer:</strong> ${escapeHtml(item.writer)}</span>${item.years ? `<span><strong>Run years:</strong> ${escapeHtml(item.years)}</span>` : ''}<span>${item.sections.length} sections</span>${sharedCount ? `<span>· ${sharedCount} shared crossover issues</span>` : ''}</div><p class="item-summary">${escapeHtml(item.summary)}</p>${item.note ? `<p class="item-note"><strong>Reading note:</strong> ${escapeHtml(item.note)}</p>` : ''}${options.showLocks || item.kind === 'event' ? renderLock(item) : ''}</div>
       <div class="item-right"><span class="progress-label">${p.read}/${p.total} route issues · ${p.status}</span>${renderProgressBar(p.percent)}<div class="card-actions"><button class="btn primary" ${compact ? `data-jump-item="${item.id}"` : `data-toggle-item="${item.id}"`}>${compact ? 'Open in context' : (isOpen ? 'Close issues' : 'Open issues')}</button><button class="btn" data-mark-item="${item.id}" data-value="${p.status === 'complete' ? 'unread' : 'read'}">${p.status === 'complete' ? 'Mark unread' : 'Mark route read'}</button></div></div></div>
       ${compact ? '' : `<div class="item-details ${isOpen ? 'open' : ''}">${isOpen ? renderItemDetails(item) : ''}</div>`}
     </article>`;
@@ -978,10 +980,18 @@
       renderMaster();
       return;
     }
-    if (event.target.closest('[data-reset-lanes]')) {
-      settings.routeLanes = [...(DATA.routeConfig?.defaultLanes || [])];
+    if (event.target.closest('[data-select-all-lanes]')) {
+      settings.routeLanes = [...(DATA.routeConfig?.laneChoices || [])];
       saveSettings();
       renderMaster();
+      toast('All reading lanes selected');
+      return;
+    }
+    if (event.target.closest('[data-clear-all-lanes]')) {
+      settings.routeLanes = [];
+      saveSettings();
+      renderMaster();
+      toast('All reading lanes cleared');
       return;
     }
     const roadmapTab = event.target.closest('[data-roadmap-tab]');
